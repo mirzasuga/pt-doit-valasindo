@@ -11,6 +11,24 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/',[
+    'uses' => 'HomeController@getHome',
+    'as' => 'home'
+]);
+
+
+/**
+ * Valas URL
+ */
+
+Route::get('/valas/entry',[
+    'uses' => 'ValasController@getEntry'
+])->name('entry.valas');
+
+Route::get('/test', function() {
+    return view('layouts.dashboard');
 });
