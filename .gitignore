@@ -5,8 +5,11 @@
 /vendor
 /.idea
 /.vagrant
+<<<<<<< HEAD
 /vendor
 .gitignore
+=======
+>>>>>>> 969b77ee2d65c173cf68a5910e4cbc009c72b35c
 Homestead.json
 Homestead.yaml
 npm-debug.log
