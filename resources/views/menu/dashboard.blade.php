@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" style="z-index:99999999;">
     <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -8,15 +8,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Brand</a>
+            <a class="navbar-brand" href="#">Dashboard</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active">
-                    <a href="{{ route('home') }}">Home <span class="sr-only">(current)</span></a>
-                </li>
-                
+                <!-- <li class="active">
+                    <a href="{{ route('dashboard') }}">Dashboard <span class="sr-only">(current)</span></a>
+                </li> -->
+                <li><a id="nav_valas" href="{{ route('valas_index') }}">Valas</a></li>
+                <li><a id="nav_mitra" href="{{ route('mitra_index') }}">Mitra</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Kurs <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -24,8 +25,12 @@
                         <li><a href="#">Booking Kurs</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Dashboard</a></li>
-                <li><a id="entry-valas" href="#">Entry Valas</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Master<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a id="entry-valas" href="#entry-valas">Entry Valas</a></li>
+                    </ul>
+                </li>
                 <ul class="nav navbar-nav navbar-right">
                 @if(Auth::check())
                     <li class="dropdown">
@@ -56,16 +61,3 @@
         </div>
     </div>
 </nav>
-@section('readyJS')
-<script>
-$(document).ready(function() {
-    var frmentryvalas = new FormValas({
-        container: "#containerValas",
-        action: "{{ route('api.frm_valas') }}",
-    });
-    $("#entry-valas").on('click', function() {
-        frmentryvalas.loadForm();
-    });
-});
-</script>
-@endsection
