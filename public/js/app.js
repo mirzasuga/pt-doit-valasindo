@@ -1072,7 +1072,7 @@ module.exports = function normalizeComponent (
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(11);
-module.exports = __webpack_require__(45);
+module.exports = __webpack_require__(47);
 
 
 /***/ }),
@@ -1081,9 +1081,9 @@ module.exports = __webpack_require__(45);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Valas_vue__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Valas_vue__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Valas_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Valas_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Mitra_vue__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Mitra_vue__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Mitra_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_Mitra_vue__);
 
 /**
@@ -1096,7 +1096,7 @@ __webpack_require__(12);
 
 window.Vue = __webpack_require__(36);
 
-Vue.use(__webpack_require__(55));
+Vue.use(__webpack_require__(39));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -42805,423 +42805,7 @@ exports.clearImmediate = clearImmediate;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(4)))
 
 /***/ }),
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(9)
-/* script */
-var __vue_script__ = __webpack_require__(43)
-/* template */
-var __vue_template__ = __webpack_require__(44)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\components\\Valas.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1962b0ac", Component.options)
-  } else {
-    hotAPI.reload("data-v-1962b0ac", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            dataValas: [],
-            valas: {
-                prefix: '',
-                nama_valas: '',
-                deskripsi: ''
-            },
-            searchKeyword: { q: '' }
-        };
-    },
-    created: function created() {
-        this.fetchDataValas();
-    },
-
-    methods: {
-        cariValas: function cariValas(e) {
-            var _this = this;
-
-            if (e.code === "Enter") {
-                this.$http.post('valas/cari', this.searchKeyword).then(function (res) {
-                    _this.dataValas = res.data.search_result;
-                });
-            } else {
-                if (this.searchKeyword.q.length <= 0) {
-                    this.fetchDataValas();
-                }
-            }
-        },
-        createValas: function createValas() {
-            var _this2 = this;
-
-            this.$http.post('valas/store', this.valas).then(function (res) {
-                _this2.dataValas.push(res.data.valas);
-                _this2.clear();
-            });
-        },
-        clear: function clear() {
-            this.valas = {
-                prefix: '',
-                nama_valas: '',
-                deskripsi: ''
-            };
-        },
-        editValas: function editValas(e) {
-            var row = void 0;
-            this.dataValas.map(function (item) {
-                if (item.valas_id == e.target.id) {
-                    row = {
-                        valas_id: item.valas_id,
-                        prefix: item.prefix,
-                        deskripsi: item.deskripsi,
-                        nama_valas: item.nama_valas
-                    };
-                }
-            });
-            console.log(row);
-        },
-        fetchDataValas: function fetchDataValas() {
-            var _this3 = this;
-
-            this.$http.get('valas/all').then(function (response) {
-                _this3.dataValas = response.data.valas;
-            });
-        },
-        onClickEdit: function onClickEdit() {},
-        upperPrefix: function upperPrefix() {
-            this.valas.prefix = this.valas.prefix.toUpperCase();
-        }
-    }
-});
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c(
-      "div",
-      { staticClass: "col-lg-offset-1 col-xs-5 col-sm-5 col-md-5 col-lg-5" },
-      [
-        _c("div", { staticClass: "panel panel-default" }, [
-          _c("div", { staticClass: "panel-body" }, [
-            _c(
-              "form",
-              {
-                attrs: { method: "POST" },
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    _vm.createValas($event)
-                  }
-                }
-              },
-              [
-                _c("legend", [_vm._v("Entry Data Valas")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "" } }, [_vm._v("Currencies")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.valas.prefix,
-                        expression: "valas.prefix"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text", id: "", placeholder: "" },
-                    domProps: { value: _vm.valas.prefix },
-                    on: {
-                      keyup: _vm.upperPrefix,
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.valas, "prefix", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "" } }, [_vm._v("Nama Valas")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.valas.nama_valas,
-                        expression: "valas.nama_valas"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text", placeholder: "Nama Valas" },
-                    domProps: { value: _vm.valas.nama_valas },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.valas, "nama_valas", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "" } }, [_vm._v("Deskripsi")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.valas.deskripsi,
-                        expression: "valas.deskripsi"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text", id: "", placeholder: "Deskripsi" },
-                    domProps: { value: _vm.valas.deskripsi },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.valas, "deskripsi", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-                  [_vm._v("Submit")]
-                )
-              ]
-            )
-          ])
-        ])
-      ]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" }, [
-      _c("div", { staticClass: "panel panel-default" }, [
-        _c("div", { staticClass: "panel-body" }, [
-          _c("div", { staticClass: "form-group" }, [
-            _c("div", { staticClass: "form-group has-feedback" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.searchKeyword.q,
-                    expression: "searchKeyword.q"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", placeholder: "cari" },
-                domProps: { value: _vm.searchKeyword.q },
-                on: {
-                  keyup: _vm.cariValas,
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.searchKeyword, "q", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", {
-                staticClass: "glyphicon glyphicon-search form-control-feedback"
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("table", { staticClass: "table table-striped table-hover" }, [
-            _vm._m(0, false, false),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.dataValas, function(valas) {
-                return _c("tr", [
-                  _c("td", [_vm._v(_vm._s(valas.prefix))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(valas.nama_valas))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-small btn-default",
-                        attrs: { id: valas.valas_id },
-                        on: { click: _vm.editValas }
-                      },
-                      [_vm._v("e")]
-                    )
-                  ])
-                ])
-              })
-            )
-          ])
-        ])
-      ])
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Currencies")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Nama Valas")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Aksi")])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-1962b0ac", module.exports)
-  }
-}
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44323,7 +43907,7 @@ var xhrClient = function (request) {
 
 var nodeClient = function (request) {
 
-    var client = __webpack_require__(56);
+    var client = __webpack_require__(40);
 
     return new PromiseObj(function (resolve) {
 
@@ -44799,24 +44383,452 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 
 /***/ }),
-/* 56 */
+/* 40 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(9)
 /* script */
-var __vue_script__ = __webpack_require__(61)
+var __vue_script__ = __webpack_require__(42)
 /* template */
-var __vue_template__ = __webpack_require__(62)
+var __vue_template__ = __webpack_require__(43)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Valas.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1962b0ac", Component.options)
+  } else {
+    hotAPI.reload("data-v-1962b0ac", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            dataValas: [],
+            valas: {
+                prefix: '',
+                nama_valas: '',
+                deskripsi: '',
+                stok: 0
+            },
+            searchKeyword: { q: '' }
+        };
+    },
+    created: function created() {
+        this.fetchDataValas();
+    },
+
+    methods: {
+        cariValas: function cariValas(e) {
+            var _this = this;
+
+            if (e.code === "Enter") {
+                this.$http.post('valas/cari', this.searchKeyword).then(function (res) {
+                    _this.dataValas = res.data.search_result;
+                });
+            } else {
+                if (this.searchKeyword.q.length <= 0) {
+                    this.fetchDataValas();
+                }
+            }
+        },
+        createValas: function createValas() {
+            var _this2 = this;
+
+            this.$http.post('valas/store', this.valas).then(function (res) {
+                _this2.dataValas.push(res.data.valas);
+                _this2.clear();
+            });
+        },
+        clear: function clear() {
+            this.valas = {
+                prefix: '',
+                nama_valas: '',
+                deskripsi: ''
+            };
+        },
+        editValas: function editValas(e) {
+            var row = void 0;
+            this.dataValas.map(function (item) {
+                if (item.valas_id == e.target.id) {
+                    row = {
+                        valas_id: item.valas_id,
+                        prefix: item.prefix,
+                        deskripsi: item.deskripsi,
+                        nama_valas: item.nama_valas
+                    };
+                }
+            });
+            console.log(row);
+        },
+        fetchDataValas: function fetchDataValas() {
+            var _this3 = this;
+
+            this.$http.get('valas/all').then(function (response) {
+                _this3.dataValas = response.data.valas;
+            });
+        },
+        onClickEdit: function onClickEdit() {},
+        upperPrefix: function upperPrefix() {
+            this.valas.prefix = this.valas.prefix.toUpperCase();
+        }
+    }
+});
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-xs-5 col-sm-5 col-md-5 col-lg-5" }, [
+      _c("div", { staticClass: "panel panel-default" }, [
+        _c("div", { staticClass: "panel-body" }, [
+          _c(
+            "form",
+            {
+              attrs: { method: "POST" },
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  _vm.createValas($event)
+                }
+              }
+            },
+            [
+              _c("legend", [_vm._v("Entry Data Valas")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "" } }, [_vm._v("Currencies")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.valas.prefix,
+                      expression: "valas.prefix"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", id: "", placeholder: "" },
+                  domProps: { value: _vm.valas.prefix },
+                  on: {
+                    keyup: _vm.upperPrefix,
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.valas, "prefix", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "" } }, [_vm._v("Nama Valas")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.valas.nama_valas,
+                      expression: "valas.nama_valas"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: "Nama Valas" },
+                  domProps: { value: _vm.valas.nama_valas },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.valas, "nama_valas", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "" } }, [_vm._v("Deskripsi")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.valas.deskripsi,
+                      expression: "valas.deskripsi"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", id: "", placeholder: "Deskripsi" },
+                  domProps: { value: _vm.valas.deskripsi },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.valas, "deskripsi", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "" } }, [_vm._v("Stok")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.valas.stok,
+                      expression: "valas.stok"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: "Deskripsi" },
+                  domProps: { value: _vm.valas.stok },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.valas, "stok", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                [_vm._v("Submit")]
+              )
+            ]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-xs-7 col-sm-7 col-md-7 col-lg-7" }, [
+      _c("div", { staticClass: "panel panel-default" }, [
+        _c("div", { staticClass: "panel-body" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("div", { staticClass: "form-group has-feedback" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.searchKeyword.q,
+                    expression: "searchKeyword.q"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "cari" },
+                domProps: { value: _vm.searchKeyword.q },
+                on: {
+                  keyup: _vm.cariValas,
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.searchKeyword, "q", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("span", {
+                staticClass: "glyphicon glyphicon-search form-control-feedback"
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("table", { staticClass: "table table-striped table-hover" }, [
+            _vm._m(0, false, false),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.dataValas, function(valas) {
+                return _c("tr", [
+                  _c("td", [_vm._v(_vm._s(valas.prefix))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(valas.nama_valas))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(valas.stok))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-small btn-default",
+                        attrs: { id: valas.valas_id },
+                        on: { click: _vm.editValas }
+                      },
+                      [_vm._v("e")]
+                    )
+                  ])
+                ])
+              })
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Currencies")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Nama Valas")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Stok")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Aksi")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1962b0ac", module.exports)
+  }
+}
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(9)
+/* script */
+var __vue_script__ = __webpack_require__(45)
+/* template */
+var __vue_template__ = __webpack_require__(46)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44856,7 +44868,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 61 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44990,7 +45002,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 62 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45220,6 +45232,12 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-358a73c0", module.exports)
   }
 }
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

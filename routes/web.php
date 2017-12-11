@@ -22,6 +22,12 @@ Route::get('/home',[
     'uses' => 'HomeController@getHome',
     'as' => 'home'
 ]);
+Route::get('/test3', function() {
+    $tukars = \App\Penukaran::find(1)->detilTukar()->get();
+    foreach($tukars as $t) {
+        dd($t->valas()->first());
+    }
+});
 
 /**
  * DASHBOARD

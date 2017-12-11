@@ -24,7 +24,8 @@ class ValasController extends Controller
         $stored = Valas::create([
             'nama_valas' => $request->nama_valas,
             'prefix'    => $request->prefix,
-            'deskripsi' => $request->deskripsi
+            'deskripsi' => $request->deskripsi,
+            'stok'  => $request->stok
         ]);
         if($stored) {
             return response()->json(['valas' => $request->all()]);
