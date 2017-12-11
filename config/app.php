@@ -227,5 +227,11 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+    'validation_msg' => [
+        'required' => ':attribute tidak boleh kosong.',
+        'unique' => 'Nama :attribute sudah pernah ada.',
+        'max'   => ':attribute tidak boleh lebih dari :max',
+        'size'  => ':attribute harus :size karakter'
+    ],
 
 ];

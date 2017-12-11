@@ -14,6 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
+        'App\User' => 'App\Policies\DashboardPolicy'
     ];
 
     /**
@@ -24,7 +25,20 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
+        $this->registerDashboardPolicies();
+    }
+    public function registerDashboardPolicies() {
+        Gate::define('view-kurs', function($user) {
+            return $user->hasAccess(['view-kurs']);
+        });
+        Gate::define('view-dashboard', function($user) {
+            return $user->hasAccess(['view-dashboard']);
+        });
+        Gate::define('cek-dashboard', function($user) {
+            return $user->hasAccess(['cek-dashboard']);
+        });
+        Gate::define('dashboard', function($user) {
+            return $user->hasAccess(['dashboard']);
+        });
     }
 }
