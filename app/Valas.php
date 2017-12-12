@@ -11,11 +11,18 @@ class Valas extends Model
     protected $fillable = [
         'nama_valas',
         'prefix',
-        'deskripsi'
+        'deskripsi',
+        'stok'
     ];
     public $timestamps = false;
 
     public function search($q) {
         return $this->where('prefix','like',$q.'%')->get();
+    }
+    public function kurses() {
+        return $this->hasMany(Kurs::class,'valas_id');
+    }
+    public function mitra() {
+        //return $this->hasManyThrough(Mitra::class,'')
     }
 }
