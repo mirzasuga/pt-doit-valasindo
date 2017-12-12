@@ -20,9 +20,14 @@ Vue.use(require('vue-resource'));
 // Vue.component('example-component', require('./components/ExampleComponent.vue'));
 import Valas from './components/Valas.vue';
 import Mitra from './components/Mitra.vue';
+import Penukaran from './components/Penukaran.vue';
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrftoken;
 
 const app = new Vue({
     el: '#app',
-    components:{ Valas ,Mitra}
+    components:{
+        Valas,
+        Mitra,
+        Penukaran
+    }
 });

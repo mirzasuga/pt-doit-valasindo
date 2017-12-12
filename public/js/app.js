@@ -1085,6 +1085,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Valas_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Valas_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Mitra_vue__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Mitra_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_Mitra_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Penukaran_vue__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Penukaran_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_Penukaran_vue__);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -1107,11 +1109,16 @@ Vue.use(__webpack_require__(39));
 // Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
 
+
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrftoken;
 
 var app = new Vue({
   el: '#app',
-  components: { Valas: __WEBPACK_IMPORTED_MODULE_0__components_Valas_vue___default.a, Mitra: __WEBPACK_IMPORTED_MODULE_1__components_Mitra_vue___default.a }
+  components: {
+    Valas: __WEBPACK_IMPORTED_MODULE_0__components_Valas_vue___default.a,
+    Mitra: __WEBPACK_IMPORTED_MODULE_1__components_Mitra_vue___default.a,
+    Penukaran: __WEBPACK_IMPORTED_MODULE_2__components_Penukaran_vue___default.a
+  }
 });
 
 /***/ }),
@@ -45238,6 +45245,701 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(9)
+/* script */
+var __vue_script__ = __webpack_require__(58)
+/* template */
+var __vue_template__ = __webpack_require__(59)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Penukaran.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-33d14a26", Component.options)
+  } else {
+    hotAPI.reload("data-v-33d14a26", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            URLS: [],
+            rows: [],
+            valas: {
+                prefix: ''
+            },
+            jenis: 'jual',
+            prefixOnRequest: false,
+            total: 0
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        this.$http.get(configURLs).then(function (res) {
+            _this.URLS = res.data.urls;
+        });
+    },
+
+    methods: {
+        addRow: function addRow() {
+            var elm = document.createElement('tr');
+            this.rows.push({
+                prefix: '',
+                amount: 0,
+                rate: 0,
+                rupiah: 0
+            });
+        },
+        putAllValas: function putAllValas() {},
+        removeRow: function removeRow(idx) {
+            this.rows.splice(idx, 1);
+            this.hitungTotal();
+        },
+        setPrefix: function setPrefix(idx) {
+            var prefix = this.rows[idx].prefix;
+            this.rows[idx].prefix = prefix.toUpperCase();
+            this.observePrefix(idx);
+        },
+        clearPrefix: function clearPrefix(idx) {
+            this.rows[idx].prefix = '';
+        },
+        observePrefix: function observePrefix(idx) {
+            if (parseInt(this.rows[idx].prefix.length) === 3) {
+                this.fetchValasRate(idx, this.rows[idx].prefix);
+            }
+        },
+        fetchValasRate: function fetchValasRate(idx, prefix) {
+            var _this2 = this;
+
+            var url = this.URLS.put_valas_rate + '/' + prefix;
+
+            this.$http.get(url, { before: this.prefixHttpOnRequest() }).then(function (res) {
+                console.log(res.data);
+                if (res.data.status == 200) {
+                    _this2.setRate(idx, res.data.data);
+                } else {
+                    _this2.clearPrefix(idx);
+                    alert(res.data.message);
+                }
+                _this2.prefixHttpOnSuccess();
+            });
+        },
+        prefixHttpOnRequest: function prefixHttpOnRequest() {
+            this.prefixOnRequest = true;
+        },
+        prefixHttpOnSuccess: function prefixHttpOnSuccess() {
+            this.prefixOnRequest = false;
+        },
+        disableInput: function disableInput(idx) {},
+        enableInput: function enableInput(idx) {},
+        setRate: function setRate(idx, val) {
+            if (this.jenis == 'jual') {
+                this.rows[idx].rate = val.jual;
+            } else if (this.jenis == 'beli') {
+                this.rows[idx].rate = jal.beli;
+            }
+        },
+        hitungRupiah: function hitungRupiah(idx) {
+            var rate = this.rows[idx].rate;
+            var amount = this.rows[idx].amount;
+            var rupiah = amount * rate;
+            this.rows[idx].rupiah = rupiah;
+            this.hitungTotal();
+        },
+        hitungTotal: function hitungTotal() {
+            var _this3 = this;
+
+            if (this.rows.length > 1) {
+                this.rows.map(function (row) {
+                    _this3.total += row.rupiah;
+                });
+            } else if (this.rows.length == 1) {
+                this.total = this.rows[0].rupiah;
+            } else {
+                this.total = 0;
+            }
+            console.log(this.total);
+        },
+        simpan: function simpan() {
+            console.log(this.rows);
+        }
+    }
+});
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-xs-12 col-sm-12 col-md-12 col-lg-12" }, [
+      _c("div", { staticClass: "panel panel-default" }, [
+        _vm._m(0, false, false),
+        _vm._v(" "),
+        _c("div", { staticClass: "panel-body" }, [
+          _c(
+            "div",
+            { staticClass: "row", staticStyle: { "margin-bottom": "20px" } },
+            [
+              _c("div", { staticClass: "container" }, [
+                _c(
+                  "div",
+                  { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" },
+                  [
+                    _c(
+                      "form",
+                      { staticClass: "form-inline", attrs: { role: "form" } },
+                      [
+                        _vm._m(1, false, false),
+                        _vm._v(" "),
+                        _vm._m(2, false, false),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success pull-right",
+                              attrs: { type: "button" },
+                              on: { click: _vm.simpan }
+                            },
+                            [
+                              _c("span", {
+                                staticClass: "glyphicon glyphicon-ok",
+                                attrs: { "aria-hidden": "true" }
+                              }),
+                              _vm._v(
+                                "\r\n                                        Selesai\r\n                                    "
+                              )
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success pull-right",
+                              attrs: { type: "button" },
+                              on: { click: _vm.addRow }
+                            },
+                            [
+                              _c("span", {
+                                staticClass: "glyphicon glyphicon-plus",
+                                attrs: { "aria-hidden": "true" }
+                              }),
+                              _vm._v(
+                                "\r\n                                        Tambah\r\n                                    "
+                              )
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+              },
+              [
+                _c(
+                  "table",
+                  {
+                    staticClass: "table table-hover table-bordered text-center"
+                  },
+                  [
+                    _vm._m(3, false, false),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      [
+                        _vm._l(_vm.rows, function(row, idx) {
+                          return _c("tr", [
+                            _c("td", { staticStyle: { width: "15%" } }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: row.prefix,
+                                    expression: "row.prefix"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  disabled: _vm.prefixOnRequest == true,
+                                  maxlength: "3",
+                                  type: "text",
+                                  required: "required",
+                                  width: "60%",
+                                  placeholder: "ex:USD"
+                                },
+                                domProps: { value: row.prefix },
+                                on: {
+                                  keyup: function($event) {
+                                    _vm.setPrefix(idx)
+                                  },
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(row, "prefix", $event.target.value)
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("div", { staticClass: "input-group" }, [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "input-group-addon",
+                                    attrs: { id: "basic-addon1" }
+                                  },
+                                  [_vm._v(_vm._s(row.prefix))]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: row.amount,
+                                      expression: "row.amount"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "text",
+                                    placeholder: "0",
+                                    "aria-describedby": "basic-addon1"
+                                  },
+                                  domProps: { value: row.amount },
+                                  on: {
+                                    keyup: function($event) {
+                                      _vm.hitungRupiah(idx)
+                                    },
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        row,
+                                        "amount",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("div", { staticClass: "input-group" }, [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "input-group-addon",
+                                    attrs: { id: "basic-addon1" }
+                                  },
+                                  [_vm._v("IDR")]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: row.rate,
+                                      expression: "row.rate"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "text",
+                                    readonly: "",
+                                    placeholder: "0",
+                                    "aria-describedby": "basic-addon1"
+                                  },
+                                  domProps: { value: row.rate },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(row, "rate", $event.target.value)
+                                    }
+                                  }
+                                })
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("div", { staticClass: "input-group" }, [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "input-group-addon",
+                                    attrs: { id: "basic-addon1" }
+                                  },
+                                  [_vm._v("Rp")]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: row.rupiah,
+                                      expression: "row.rupiah"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "text",
+                                    readonly: "",
+                                    placeholder: "0",
+                                    "aria-describedby": "basic-addon1"
+                                  },
+                                  domProps: { value: row.rupiah },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        row,
+                                        "rupiah",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "btn btn-sm btn-danger",
+                                  on: {
+                                    click: function($event) {
+                                      _vm.removeRow(idx)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("span", {
+                                    staticClass: "glyphicon glyphicon-remove",
+                                    attrs: { "aria-hidden": "true" }
+                                  })
+                                ]
+                              )
+                            ])
+                          ])
+                        }),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("td", { attrs: { colspan: "2" } }),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              "\r\n                                        Jumlah Total\r\n                                    "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { attrs: { id: "total", colspan: "2" } }, [
+                            _vm._v(
+                              "\r\n                                        Total : Rp, " +
+                                _vm._s(_vm.total) +
+                                "\r\n                                    "
+                            )
+                          ])
+                        ])
+                      ],
+                      2
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success text-center",
+                      attrs: { type: "button" },
+                      on: { click: _vm.addRow }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-plus",
+                        attrs: { "aria-hidden": "true" }
+                      }),
+                      _vm._v(
+                        "\r\n                                Tambah\r\n                            "
+                      )
+                    ]
+                  )
+                ])
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-heading" }, [
+      _c("h3", { staticClass: "panel-title" }, [_vm._v("Entry Penukaran")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", { staticClass: "sr-only", attrs: { for: "" } }, [
+        _vm._v("label")
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { type: "date", id: "", placeholder: "Input field" }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", { staticClass: "sr-only", attrs: { for: "" } }, [
+        _vm._v("label")
+      ]),
+      _vm._v(" "),
+      _c("select", { staticClass: "form-control" }, [
+        _c("option", { attrs: { value: "" } }, [_vm._v("-- Pilih --")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "" } }, [_vm._v("Jual")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "" } }, [_vm._v("Beli")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticClass: "text-center" }, [_vm._v("Valas")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Jumlah Amount")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [
+          _vm._v("Harga Satuan  Rate")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Rupah  Equivalent")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Action")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-33d14a26", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

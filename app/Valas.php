@@ -22,6 +22,9 @@ class Valas extends Model
     public function kurses() {
         return $this->hasMany(Kurs::class,'valas_id');
     }
+    public function activeKurs() {
+        return $this->kurses()->where('is_active',1)->first();
+    }
     public function mitra() {
         //return $this->hasManyThrough(Mitra::class,'')
     }

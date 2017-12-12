@@ -88,6 +88,7 @@
         window.Laravel = {
           csrftoken : "{{ csrf_token() }}",
         };
+        window.configURLs = "{{ route('configURLs') }}";
         </script>
         <script src="{{ mix('js/app.js') }}"></script>
         

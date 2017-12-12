@@ -11,6 +11,17 @@
 |
 */
 
+Route::get('/url/valas', function() {
+    $data = [
+        'urls' => [
+            'put_valas_all'     => route("put_valas_all"),
+            'put_valas_rate'    => route("put_valas_rate",['prefix' => null]),
+        ],
+    ];
+    return response()->json($data);
+})->name("configURLs");
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -83,6 +94,32 @@ Route::group(['prefix' => 'dashboard/mitra'],function() {
         'as'    => 'mitra_search'
     ]);
 });
+
+/**
+ * ==========
+ * PENUKARAN
+ * ==========
+ */
+Route::group(['prefix' => 'dashboard/penukaran'], function() {
+    Route::get('/', [
+        'uses'  => 'PenukaranController@index',
+        'as'    => 'penukaran_index'
+    ]);
+});
+
+/**
+ * ===============
+ *      VALAS
+ * ===============
+ */
+Route::get('/valas/all',[
+    'uses'  => 'ValasController@putAll',
+    'as'    => 'put_valas_all'
+ ]);
+ Route::get('/valas/rate/{prefix}',[
+    'uses'  => 'ValasController@putValasRate',
+    'as'    => 'put_valas_rate'
+ ]);
 
 Route::get('/valas/entry',[
     'uses' => 'ValasController@index'
