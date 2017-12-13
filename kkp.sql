@@ -27,6 +27,18 @@ CREATE TABLE IF NOT EXISTS `group_roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Pengeluaran data tidak dipilih.
+-- membuang struktur untuk table kkp.kuitansipenukaran
+CREATE TABLE IF NOT EXISTS `kuitansipenukaran` (
+  `no_kuitansi` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tukar_id` int(10) unsigned NOT NULL,
+  `tanggal_cetak` datetime NOT NULL,
+  `jumlah_cetak` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`no_kuitansi`),
+  KEY `FK__penukaran` (`tukar_id`),
+  CONSTRAINT `FK__penukaran` FOREIGN KEY (`tukar_id`) REFERENCES `penukaran` (`tukar_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+
+-- Pengeluaran data tidak dipilih.
 -- membuang struktur untuk table kkp.kurs
 CREATE TABLE IF NOT EXISTS `kurs` (
   `kurs_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -57,8 +69,8 @@ CREATE TABLE IF NOT EXISTS `kurs_penukaran` (
   `rate` int(11) NOT NULL DEFAULT '0',
   KEY `FK_kurs_penukaran_kurs` (`kurs_id`),
   KEY `FK_kurs_penukaran_penukaran` (`tukar_id`),
-  CONSTRAINT `FK_kurs_penukaran_kurs` FOREIGN KEY (`kurs_id`) REFERENCES `kurs` (`kurs_id`),
-  CONSTRAINT `FK_kurs_penukaran_penukaran` FOREIGN KEY (`tukar_id`) REFERENCES `penukaran` (`tukar_id`)
+  CONSTRAINT `FK_kurs_penukaran_kurs` FOREIGN KEY (`kurs_id`) REFERENCES `kurs` (`kurs_id`) ON DELETE NO ACTION,
+  CONSTRAINT `FK_kurs_penukaran_penukaran` FOREIGN KEY (`tukar_id`) REFERENCES `penukaran` (`tukar_id`) ON DELETE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Pengeluaran data tidak dipilih.
@@ -79,21 +91,36 @@ CREATE TABLE IF NOT EXISTS `mitra` (
   `fax` varchar(20) NOT NULL DEFAULT '0',
   `alamat` varchar(191) NOT NULL DEFAULT '0',
   PRIMARY KEY (`mitra_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 -- Pengeluaran data tidak dipilih.
 -- membuang struktur untuk table kkp.penukaran
 CREATE TABLE IF NOT EXISTS `penukaran` (
   `tukar_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `teller_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `teller_id` int(10) unsigned NOT NULL,
   `total_rupiah` double NOT NULL DEFAULT '0',
   `jenis_tukar` enum('S','B') NOT NULL DEFAULT 'S',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`tukar_id`),
   KEY `FK__users` (`teller_id`),
-  CONSTRAINT `FK__users` FOREIGN KEY (`teller_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  CONSTRAINT `FK__users` FOREIGN KEY (`teller_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=latin1;
+
+-- Pengeluaran data tidak dipilih.
+-- membuang struktur untuk table kkp.ppsv
+CREATE TABLE IF NOT EXISTS `ppsv` (
+  `ppsv_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `who_request` int(10) unsigned NOT NULL,
+  `keterangan` varchar(191) NOT NULL,
+  `tgl_permintaan` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` enum('U','A','R') NOT NULL DEFAULT 'U',
+  `processed_at` datetime DEFAULT NULL,
+  `viewed_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`ppsv_id`),
+  KEY `FK_ppsv_users` (`who_request`),
+  CONSTRAINT `FK_ppsv_users` FOREIGN KEY (`who_request`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Pengeluaran data tidak dipilih.
 -- membuang struktur untuk table kkp.roles
@@ -131,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `valas` (
   `deskripsi` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`valas_id`),
   UNIQUE KEY `prefix` (`prefix`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 -- Pengeluaran data tidak dipilih.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
