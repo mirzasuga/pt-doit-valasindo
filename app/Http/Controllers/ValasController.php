@@ -44,6 +44,27 @@ class ValasController extends Controller
         $valas = Valas::get();
         return response()->json(['valas' => $valas]);
     }
+    function putAll() {
+        dd('oke');
+    }
+    function putValasRate($prefix) {
+        $valas   = Valas::where('prefix',$prefix)->first();
+        if($valas) {
+            $kurs    = $valas->activeKurs();
+            $response= [
+                'status'    => 200,
+                'message'   => 'Found!',
+                'data'      => $kurs
+            ];
+            if($kurs !== null) {
+                return response()->json( $response );
+            }
+        }
+        
+        $response['status']  = 404;
+        $response['message'] = 'Data tidak ditemukan!';
+        return response()->json( $response );
+    }
     function showEntryForm(Request $request) {
 
     }

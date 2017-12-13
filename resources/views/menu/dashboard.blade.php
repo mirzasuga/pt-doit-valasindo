@@ -18,6 +18,7 @@
                 </li> -->
                 <li><a id="nav_valas" href="{{ route('valas_index') }}">Valas</a></li>
                 <li><a id="nav_mitra" href="{{ route('mitra_index') }}">Mitra</a></li>
+                <li><a id="nav_mitra" href="{{ route('penukaran_index') }}">Penukaran</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Kurs <span class="caret"></span></a>
                     <ul class="dropdown-menu">

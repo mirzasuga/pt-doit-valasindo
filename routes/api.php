@@ -19,3 +19,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('load/frm-valas', [
     'uses' => 'ValasController@getFormEntry'
 ])->name('api.frm_valas');
+
+/**
+ * ===============
+ *      VALAS
+ * ===============
+ */
+
+
+ 

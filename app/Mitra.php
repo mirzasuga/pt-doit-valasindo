@@ -14,7 +14,7 @@ class Mitra extends Model
     public $timestamps = false;
 
     function search($q) {
-        return $this->where('nama','like',$q.'%')->get();
+        return $this->where('nama','like','%'.$q.'%')->get();
     }
     public function kurses() {
         return $this->hasMany(Kurs::class,'mitra_id');

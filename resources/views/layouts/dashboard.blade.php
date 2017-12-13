@@ -88,8 +88,11 @@
         window.Laravel = {
           csrftoken : "{{ csrf_token() }}",
         };
+        window.configURLs = "{{ route('configURLs') }}";
+        window.TodayDate  = "{{ date('Y-m-d') }}";
         </script>
         <script src="{{ mix('js/app.js') }}"></script>
+        <script src="{{ mix('js/print.min.js') }}"></script>
         
         <!-- <script src="{{ URL::to('js/custom.js') }}"></script> -->
         @yield('readyJS')

@@ -11,6 +11,19 @@
 |
 */
 
+Route::get('/url/valas', function() {
+    $data = [
+        'urls' => [
+            'put_valas_all'         => route("put_valas_all"),
+            'put_valas_rate'        => route("put_valas_rate",['prefix' => null]),
+            'penukaran_store'       => route("penukaran_store"),
+            'kuitansi_cetak'        => route("kuitansi_cetak",['tukar_id' => null]),
+        ],
+    ];
+    return response()->json($data);
+})->name("configURLs");
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -68,7 +81,8 @@ Route::group(['prefix' => 'dashboard/valas'], function() {
 Route::group(['prefix' => 'dashboard/mitra'],function() {
     Route::get('/',[
         'uses'  => 'MitraController@index',
-        'as'    => 'mitra_index'
+        'as'    => 'mitra_index',
+        'middleware' => 'role:index-mitra'
     ]);
     Route::get('/all',[
         'uses'  => 'MitraController@all',
@@ -84,6 +98,36 @@ Route::group(['prefix' => 'dashboard/mitra'],function() {
     ]);
 });
 
+/**
+ * ==========
+ * PENUKARAN
+ * ==========
+ */
+Route::group(['prefix' => 'dashboard/penukaran'], function() {
+    Route::get('/', [
+        'uses'  => 'PenukaranController@index',
+        'as'    => 'penukaran_index'
+    ]);
+    Route::post('/store', [
+        'uses'  => 'PenukaranController@store',
+        'as'    => 'penukaran_store'
+    ]);
+});
+
+/**
+ * ===============
+ *      VALAS
+ * ===============
+ */
+Route::get('/valas/all',[
+    'uses'  => 'ValasController@putAll',
+    'as'    => 'put_valas_all'
+ ]);
+ Route::get('/valas/rate/{prefix}',[
+    'uses'  => 'ValasController@putValasRate',
+    'as'    => 'put_valas_rate'
+ ]);
+
 Route::get('/valas/entry',[
     'uses' => 'ValasController@index'
 ])->name('getentry.valas');
@@ -91,12 +135,25 @@ Route::post('/valas/entry',[
     'uses' => 'ValasController@postEntry'
 ])->name('postentry.valas');
 
+
+/**
+ * KUITANSI
+ */
+
+Route::group(['prefix' => 'dashboard/kuitansi'], function() {
+    Route::get('/cetak-kuitansi/{tukar_id}',[
+        'uses'  => 'KuitansiController@cetak',
+        'as'    => 'kuitansi_cetak'
+    ]);
+});
+
+
 Route::get('/test', function() {
     return 'okeeee';
 })->middleware('role:view-kurs');
 
 Route::get('test2', [
-    'uses'=> 'ValasController@test'
+    'uses'=> 'KuitansiController@buildKuitansi'
 ])
 ->middleware('role:view-dashboard')
 ->name('test');
