@@ -122,7 +122,11 @@
         </div>
 
         <div class="panel panel-default">
+            
             <div id="kuitansi" class="panel-body">
+                <button v-if="templateKuitansi !== ''" class="btn btn-primary" onclick="printJS({ printable: 'kuitansi', type: 'html' })">
+                    Cetak
+                </button>
                 <span v-html="templateKuitansi"></span>
             </div>
         </div>
@@ -285,11 +289,22 @@
             requestKuitansi(tukar_id) {
                 let urlCetakKuitansi = this.URLS.kuitansi_cetak;
                 this.$http.get(urlCetakKuitansi+'/'+tukar_id).then(res => {
-                    this.cetakKuitansi(res.data.template);
+                    this.buildKuitansi(res.data.template);
                 });
             },
-            cetakKuitansi(element) {
+            buildKuitansi(element) {
                 this.templateKuitansi = element;
+            },
+            cetakKuitansi() {
+                var printAble = window.open('', 'Print', 'height=600,width=800');
+                let page = this.templateKuitansi;
+                for(var i=0; i<2; i++) {
+                    printAble.document.write('<html><head><title>Print</title>');
+                    printAble.document.write('</head><body >');
+                    printAble.document.write(page);
+                    printAble.document.write('</body></html>');
+                }
+                printAble.print();
             },
             simpan() {
                 let url = this.URLS.penukaran_store;
@@ -301,7 +316,7 @@
                 this.$http.post(url,postData).then(response => {
                     if(response.data.status === 200) {
                         this.clearForm();
-                        this.cetakKuitansi();
+                        //this.cetakKuitansi();
                         alert(response.data.message);
                         this.requestKuitansi(response.data.tukar_id);
                         this.hasErrors = false;

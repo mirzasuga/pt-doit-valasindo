@@ -81,7 +81,8 @@ Route::group(['prefix' => 'dashboard/valas'], function() {
 Route::group(['prefix' => 'dashboard/mitra'],function() {
     Route::get('/',[
         'uses'  => 'MitraController@index',
-        'as'    => 'mitra_index'
+        'as'    => 'mitra_index',
+        'middleware' => 'role:index-mitra'
     ]);
     Route::get('/all',[
         'uses'  => 'MitraController@all',

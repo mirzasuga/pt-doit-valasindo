@@ -45427,6 +45427,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -45573,11 +45577,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var urlCetakKuitansi = this.URLS.kuitansi_cetak;
             this.$http.get(urlCetakKuitansi + '/' + tukar_id).then(function (res) {
-                _this3.cetakKuitansi(res.data.template);
+                _this3.buildKuitansi(res.data.template);
             });
         },
-        cetakKuitansi: function cetakKuitansi(element) {
+        buildKuitansi: function buildKuitansi(element) {
             this.templateKuitansi = element;
+        },
+        cetakKuitansi: function cetakKuitansi() {
+            var printAble = window.open('', 'Print', 'height=600,width=800');
+            var page = this.templateKuitansi;
+            for (var i = 0; i < 2; i++) {
+                printAble.document.write('<html><head><title>Print</title>');
+                printAble.document.write('</head><body >');
+                printAble.document.write(page);
+                printAble.document.write('</body></html>');
+            }
+            printAble.print();
         },
         simpan: function simpan() {
             var _this4 = this;
@@ -45591,7 +45606,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$http.post(url, postData).then(function (response) {
                 if (response.data.status === 200) {
                     _this4.clearForm();
-                    _this4.cetakKuitansi();
+                    //this.cetakKuitansi();
                     alert(response.data.message);
                     _this4.requestKuitansi(response.data.tukar_id);
                     _this4.hasErrors = false;
@@ -46101,6 +46116,19 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "panel panel-default" }, [
         _c("div", { staticClass: "panel-body", attrs: { id: "kuitansi" } }, [
+          _vm.templateKuitansi !== ""
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: {
+                    onclick: "printJS({ printable: 'kuitansi', type: 'html' })"
+                  }
+                },
+                [_vm._v("\r\n                    Cetak\r\n                ")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _c("span", { domProps: { innerHTML: _vm._s(_vm.templateKuitansi) } })
         ])
       ])
