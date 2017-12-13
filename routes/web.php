@@ -147,6 +147,44 @@ Route::group(['prefix' => 'dashboard/kuitansi'], function() {
     ]);
 });
 
+/**
+ * ==============
+ *      PPSV
+ * ==============
+ */
+Route::group(['prefix' => 'dashboard/permintaan-pembelian-stok-valas/'], function() {
+    Route::get('/', [
+        'uses'          => 'PpsvController@index',
+        'as'            => 'ppsv_index',
+        'middleware'    => 'role:ppsv-index'
+    ]);
+    Route::post('/store', [
+        'uses'          => 'PpsvController@store',
+        'as'            => 'ppsv_store',
+        'middleware'    => 'role:ppsv-store'
+    ]);
+    Route::get('/all', [
+        'uses'          => 'PpsvController@all',
+        'as'            => 'ppsv_all',
+        'middleware'    => 'role:ppsv-all'
+    ]);
+    Route::get('/detil-{ppsv_id}', [
+        'uses'          => 'PppsvController@detil',
+        'as'            => 'ppsv_detil',
+        'middleware'    => 'role:ppsv-detil'
+    ]);
+    Route::post('/approve/{ppsv_id}',[
+        'uses'          => 'PpsvController@approve',
+        'as'            => 'ppsv_approve',
+        'middleware'    => 'role:ppsv-approve'
+    ]);
+    Route::post('/reject/{ppsv_id}', [
+        'uses'          => 'PpsvController@reject',
+        'as'            => 'ppsv-reject',
+        'middleware'    => 'role:ppsv-approve',
+    ]);
+}); /**EOF PPSV */
+
 
 Route::get('/test', function() {
     return 'okeeee';
