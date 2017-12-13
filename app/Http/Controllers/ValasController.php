@@ -49,14 +49,16 @@ class ValasController extends Controller
     }
     function putValasRate($prefix) {
         $valas   = Valas::where('prefix',$prefix)->first();
-        $kurs    = $valas->activeKurs();
-        $response= [
-            'status'    => 200,
-            'message'   => 'Found!',
-            'data'      => $kurs
-        ];
-        if($kurs !== null) {
-            return response()->json( $response );
+        if($valas) {
+            $kurs    = $valas->activeKurs();
+            $response= [
+                'status'    => 200,
+                'message'   => 'Found!',
+                'data'      => $kurs
+            ];
+            if($kurs !== null) {
+                return response()->json( $response );
+            }
         }
         
         $response['status']  = 404;

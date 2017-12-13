@@ -14,8 +14,10 @@
 Route::get('/url/valas', function() {
     $data = [
         'urls' => [
-            'put_valas_all'     => route("put_valas_all"),
-            'put_valas_rate'    => route("put_valas_rate",['prefix' => null]),
+            'put_valas_all'         => route("put_valas_all"),
+            'put_valas_rate'        => route("put_valas_rate",['prefix' => null]),
+            'penukaran_store'       => route("penukaran_store"),
+            'kuitansi_cetak'        => route("kuitansi_cetak",['tukar_id' => null]),
         ],
     ];
     return response()->json($data);
@@ -105,6 +107,10 @@ Route::group(['prefix' => 'dashboard/penukaran'], function() {
         'uses'  => 'PenukaranController@index',
         'as'    => 'penukaran_index'
     ]);
+    Route::post('/store', [
+        'uses'  => 'PenukaranController@store',
+        'as'    => 'penukaran_store'
+    ]);
 });
 
 /**
@@ -128,12 +134,25 @@ Route::post('/valas/entry',[
     'uses' => 'ValasController@postEntry'
 ])->name('postentry.valas');
 
+
+/**
+ * KUITANSI
+ */
+
+Route::group(['prefix' => 'dashboard/kuitansi'], function() {
+    Route::get('/cetak-kuitansi/{tukar_id}',[
+        'uses'  => 'KuitansiController@cetak',
+        'as'    => 'kuitansi_cetak'
+    ]);
+});
+
+
 Route::get('/test', function() {
     return 'okeeee';
 })->middleware('role:view-kurs');
 
 Route::get('test2', [
-    'uses'=> 'ValasController@test'
+    'uses'=> 'KuitansiController@buildKuitansi'
 ])
 ->middleware('role:view-dashboard')
 ->name('test');

@@ -22,6 +22,8 @@ class Penukaran extends Model
         return $this->hasManyThrough(Valas::class,Kurs::class,'kurs_id','valas_id');
     }
     public function teller() {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class,'teller_id');
     }
+
+    
 }

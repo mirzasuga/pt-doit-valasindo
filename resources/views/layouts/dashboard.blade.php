@@ -89,6 +89,7 @@
           csrftoken : "{{ csrf_token() }}",
         };
         window.configURLs = "{{ route('configURLs') }}";
+        window.TodayDate  = "{{ date('Y-m-d') }}";
         </script>
         <script src="{{ mix('js/app.js') }}"></script>
         
