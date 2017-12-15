@@ -16,8 +16,16 @@ Route::get('/url/valas', function() {
         'urls' => [
             'put_valas_all'         => route("put_valas_all"),
             'put_valas_rate'        => route("put_valas_rate",['prefix' => null]),
+            'put_mitra_all'         => route("mitra_all"),
             'penukaran_store'       => route("penukaran_store"),
             'kuitansi_cetak'        => route("kuitansi_cetak",['tukar_id' => null]),
+            'put_kurs_mitra'        => route("put_kurs_mitra",['mitra_id' => null]),
+            'ppsv_store'            => route("ppsv_store"),
+            'ppsv_all'              => route("ppsv_all",['status' => null]),
+            'ppsv_approve'          => route("ppsv_approve"),
+            'ppsv_reject'           => route("ppsv_reject"),
+            'ppsv_filter'           => route("ppsv_filter",['status' => null,'tanggal' => null]),
+            'ppsv_viewed'           => route("ppsv_viewed",['ppsv_id' => null]),
         ],
     ];
     return response()->json($data);
@@ -147,6 +155,71 @@ Route::group(['prefix' => 'dashboard/kuitansi'], function() {
     ]);
 });
 
+/**
+ * ==============
+ *      PPSV
+ * ==============
+ */
+Route::group(['prefix' => 'dashboard/permintaan-pembelian-stok-valas/'], function() {
+    Route::get('/', [
+        'uses'          => 'PpsvController@index',
+        'as'            => 'ppsv_index',
+        'middleware'    => 'role:ppsv-index'
+    ]);
+    Route::post('/store', [
+        'uses'          => 'PpsvController@store',
+        'as'            => 'ppsv_store',
+        'middleware'    => 'role:ppsv-store'
+    ]);
+    Route::get('/approvals',[
+        'uses'          => 'PpsvController@approvals',
+        'as'            => 'ppsv_approvals',
+        'middleware'    => 'role:ppsv-approval'
+    ]);
+    Route::get('/all/status-{status}', [
+        'uses'          => 'PpsvController@all',
+        'as'            => 'ppsv_all',
+        'middleware'    => 'role:ppsv-all'
+    ]);
+    Route::get('/filter/{status}/{tanggal}', [
+        'uses'          => 'PpsvController@filter',
+        'as'            => 'ppsv_filter',
+        'middleware'    => 'role:ppsv-all'
+    ]);
+    Route::get('/detil-{ppsv_id}', [
+        'uses'          => 'PpsvController@detil',
+        'as'            => 'ppsv_detil',
+        'middleware'    => 'role:ppsv-detil'
+    ]);
+    Route::post('/approve',[
+        'uses'          => 'PpsvController@approve',
+        'as'            => 'ppsv_approve',
+        'middleware'    => 'role:ppsv-approve'
+    ]);
+    Route::get('/viewed/{ppsv_id}', [
+        'uses'          => 'PpsvController@viewed',
+        'as'            => 'ppsv_viewed',
+        'middleware'    => 'role:ppsv-view'
+    ]);
+    Route::post('/reject', [
+        'uses'          => 'PpsvController@reject',
+        'as'            => 'ppsv_reject',
+        'middleware'    => 'role:ppsv-reject',
+    ]);
+}); /**EOF PPSV */
+
+/**
+ * ==============
+ *      KURS
+ * ==============
+ */
+Route::group(['prefix' => 'kurs'], function() {
+    Route::get('/mitra-{mitra_id}', [
+        'uses'      => 'KursController@getKursMitra',
+        'as'        => 'put_kurs_mitra',
+        'middleware'=> 'role:put-kurs-mitra',
+    ]);
+});
 
 Route::get('/test', function() {
     return 'okeeee';
@@ -164,3 +237,8 @@ route::get('/access-denied-401',function() {
 })->name('401');
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/beautify/{role_id}',function($role_id) {
+    //$role = \App\Role::find($role_id);
+    $user = Auth::user()->roles()->get();
+    return response()->json($user);
+});
