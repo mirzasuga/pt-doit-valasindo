@@ -24,7 +24,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password'
+        'password','token','remember_token'
     ];
     public $timestamps = FALSE;
 

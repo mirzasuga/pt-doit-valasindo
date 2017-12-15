@@ -26,7 +26,10 @@ class Kurs extends Model
         return $this->belongsTo(Valas::class,'valas_id');
     }
     public function penukaran() {
-        return $this->belongsToMany(Penukaran::class,'kurs_penukaran','tukar_id','kurs_id');
+        return $this->belongsToMany(Penukaran::class,'kurs_penukaran','kurs_id','tukar_id');
+    }
+    public function ppsv() {
+        return $this->belongsToMany(Ppsv::class,'kurs_ppsv','kurs_id','ppsv_id');
     }
     public function activeKurs() {
 

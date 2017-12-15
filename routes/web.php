@@ -16,8 +16,13 @@ Route::get('/url/valas', function() {
         'urls' => [
             'put_valas_all'         => route("put_valas_all"),
             'put_valas_rate'        => route("put_valas_rate",['prefix' => null]),
+            'put_mitra_all'         => route("mitra_all"),
             'penukaran_store'       => route("penukaran_store"),
             'kuitansi_cetak'        => route("kuitansi_cetak",['tukar_id' => null]),
+            'get_kurs_mitra'        => route("get_kurs_mitra",['mitra_id' => null]),
+            'ppsv_store'            => route("ppsv_store"),
+            'ppsv_all'              => route("ppsv_all",['status' => null]),
+            'ppsv_approve'          => route("ppsv_approve"),
         ],
     ];
     return response()->json($data);
@@ -163,28 +168,45 @@ Route::group(['prefix' => 'dashboard/permintaan-pembelian-stok-valas/'], functio
         'as'            => 'ppsv_store',
         'middleware'    => 'role:ppsv-store'
     ]);
-    Route::get('/all', [
+    Route::get('/approvals',[
+        'uses'          => 'PpsvController@approvals',
+        'as'            => 'ppsv_approvals',
+        'middleware'    => 'role:ppsv-approval'
+    ]);
+    Route::get('/all/status-{status}', [
         'uses'          => 'PpsvController@all',
         'as'            => 'ppsv_all',
         'middleware'    => 'role:ppsv-all'
     ]);
     Route::get('/detil-{ppsv_id}', [
-        'uses'          => 'PppsvController@detil',
+        'uses'          => 'PpsvController@detil',
         'as'            => 'ppsv_detil',
         'middleware'    => 'role:ppsv-detil'
     ]);
-    Route::post('/approve/{ppsv_id}',[
+    Route::post('/approve',[
         'uses'          => 'PpsvController@approve',
         'as'            => 'ppsv_approve',
         'middleware'    => 'role:ppsv-approve'
     ]);
     Route::post('/reject/{ppsv_id}', [
         'uses'          => 'PpsvController@reject',
-        'as'            => 'ppsv-reject',
-        'middleware'    => 'role:ppsv-approve',
+        'as'            => 'ppsv_reject',
+        'middleware'    => 'role:ppsv-reject',
     ]);
 }); /**EOF PPSV */
 
+/**
+ * ==============
+ *      KURS
+ * ==============
+ */
+Route::group(['prefix' => 'kurs'], function() {
+    Route::get('/mitra-{mitra_id}', [
+        'uses'      => 'KursController@getKursMitra',
+        'as'        => 'get_kurs_mitra',
+        'middleware'=> 'role:get-kurs-mitra',
+    ]);
+});
 
 Route::get('/test', function() {
     return 'okeeee';

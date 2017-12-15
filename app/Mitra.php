@@ -16,7 +16,10 @@ class Mitra extends Model
     function search($q) {
         return $this->where('nama','like','%'.$q.'%')->get();
     }
-    public function kurses() {
+    public function kurs() {
         return $this->hasMany(Kurs::class,'mitra_id');
+    }
+    public function valas() {
+        return $this->hasManyThrough(Valas::class,Kurs::class,'kurs_id','valas_id','mitra_id');
     }
 }
