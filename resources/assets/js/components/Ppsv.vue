@@ -302,7 +302,7 @@
                 });
             },
             fetchKursMitra(mitra_id) {
-                let url = this.URLS.get_kurs_mitra;
+                let url = this.URLS.put_kurs_mitra;
                 this.$http.get(url+mitra_id).then(res => {
                     console.log(res.data.kurs_mitra);
                     this.kurs_mitra = res.data.kurs_mitra;

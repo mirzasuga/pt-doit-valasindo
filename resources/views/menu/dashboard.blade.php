@@ -23,7 +23,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PPSV <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route('ppsv_index') }}">Entry PPSV</a></li>
-                        <li><a href="#">Approval PPSV</a></li>
+                        <li><a href="{{ route('ppsv_approvals') }}">Approval PPSV</a></li>
                         <li><a href="#">Status PPSV</a></li>
                     </ul>
                 </li>

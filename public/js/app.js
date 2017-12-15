@@ -47444,7 +47444,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetchKursMitra: function fetchKursMitra(mitra_id) {
             var _this4 = this;
 
-            var url = this.URLS.get_kurs_mitra;
+            var url = this.URLS.put_kurs_mitra;
             this.$http.get(url + mitra_id).then(function (res) {
                 console.log(res.data.kurs_mitra);
                 _this4.kurs_mitra = res.data.kurs_mitra;
@@ -48249,6 +48249,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -48257,7 +48298,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             approvals: [],
             urls: [],
             routerIsReady: false,
-            ppsv_id: '1'
+            ppsv_id: '1',
+            statuses: [{
+                value: 'all',
+                name: 'Semua Status'
+            }, {
+                value: 'u',
+                name: 'Menunggu Approval'
+            }, {
+                value: 'a',
+                name: 'Disetujui'
+            }, {
+                value: 'r',
+                name: 'Ditolak'
+            }],
+            filter_status: '',
+            filter_tanggal: '',
+            jenis_approval: '',
+            alasanReject: ''
         };
     },
 
@@ -48268,6 +48326,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.fetchPpsv();
                 console.log('router is ready');
             }
+        },
+        filter_status: function filter_status(val) {
+            //console.log(val);
+            this.filterPpsv();
+        },
+        filter_tanggal: function filter_tanggal(val) {
+            this.filterPpsv();
         }
     },
     created: function created() {
@@ -48278,6 +48343,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         buildHrefUrl: function buildHrefUrl(id) {
             return '#' + id;
         },
+        eventViewed: function eventViewed(ppsv_id) {
+            var is_viewed = true;
+            if (this.approvals.length > 0) {
+                this.approvals.map(function (item) {
+                    if (item.ppsv_id === ppsv_id) {
+                        if (item.viewed_at === '' || item.viewed_at === null) {
+                            is_viewed = false;
+                        }
+                    }
+                });
+            }
+            if (is_viewed) {
+                return true;
+            }
+            var url = this.urls.ppsv_viewed + '/' + ppsv_id;
+            this.$http.get(url).then(function (res) {
+                console.log(res.data.message);
+            });
+        },
         fetchPpsv: function fetchPpsv() {
             var _this = this;
 
@@ -48287,22 +48371,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.approvals = res.data.approvals;
             });
         },
-        fetchUrls: function fetchUrls() {
+        filterPpsv: function filterPpsv() {
             var _this2 = this;
 
+            console.log(this.filter_tanggal);
+            console.log(this.urls.ppsv_filter);
+            var status = this.filter_status === '' ? 'all' : this.filter_status;
+            var tgl = this.filter_tanggal === '' ? '0000-00-00' : this.filter_tanggal;
+            var url = this.urls.ppsv_filter + "/" + status + '/' + tgl;
+            this.$http.get(url).then(function (res) {
+                _this2.setApprovals(res.data.ppsv);
+            });
+        },
+        setApprovals: function setApprovals(values) {
+            this.approvals = values;
+        },
+        fetchUrls: function fetchUrls() {
+            var _this3 = this;
+
             this.$http.get(configURLs).then(function (res) {
-                _this2.urls = res.data.urls;
-                _this2.setRouterIsReady(true);
+                _this3.urls = res.data.urls;
+                _this3.setRouterIsReady(true);
             });
         },
         setRouterIsReady: function setRouterIsReady(statement) {
             this.routerIsReady = statement;
         },
-        testModal: function testModal(id) {
+        showModal: function showModal(id, jenis_approval) {
             this.ppsv_id = id;
+            this.jenis_approval = jenis_approval;
         },
         confirmApprove: function confirmApprove() {
-            var _this3 = this;
+            var _this4 = this;
 
             var url = this.urls.ppsv_approve;
             var postD = {
@@ -48310,11 +48410,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
             this.$http.post(url, postD).then(function (res) {
                 console.log(res.data);
-                _this3.fetchPpsv();
+                _this4.fetchPpsv();
             });
+        },
+        confirmReject: function confirmReject() {
+            var _this5 = this;
+
+            var url = this.urls.ppsv_reject;
+            var postData = {
+                ppsv_id: this.ppsv_id,
+                alasan: this.alasanReject
+            };
+            this.$http.post(url, postData).then(function (res) {
+                alert(res.data.message);
+                _this5.fetchPpsv();
+            });
+            console.log(this.alasanReject);
         },
         cancelApprov: function cancelApprov() {
             this.ppsv_id = '';
+            this.alasan_reject = '';
         }
     }
 
@@ -48331,6 +48446,77 @@ var render = function() {
   return _c(
     "section",
     [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-xs-12 col-sm-12 col-md-12 col-lg-12" }, [
+          _c(
+            "form",
+            { staticClass: "form-horizontal", attrs: { role: "form" } },
+            [
+              _c("div", { staticClass: "form-group col-md-3" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.filter_tanggal,
+                      expression: "filter_tanggal"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "date" },
+                  domProps: { value: _vm.filter_tanggal },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.filter_tanggal = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group col-md-3" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.filter_status,
+                        expression: "filter_status"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.filter_status = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  _vm._l(_vm.statuses, function(status) {
+                    return _c("option", { domProps: { value: status.value } }, [
+                      _vm._v(_vm._s(status.name))
+                    ])
+                  })
+                )
+              ])
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
       _vm._l(_vm.approvals, function(item) {
         return _c("div", { staticClass: "collapse-group" }, [
           _c("div", { staticClass: "panel panel-default" }, [
@@ -48352,6 +48538,11 @@ var render = function() {
                         href: _vm.buildHrefUrl(item.ppsv_id),
                         "aria-expanded": "true",
                         "aria-controls": "collapseOne"
+                      },
+                      on: {
+                        click: function($event) {
+                          _vm.eventViewed(item.ppsv_id)
+                        }
                       }
                     },
                     [
@@ -48412,8 +48603,20 @@ var render = function() {
                         ])
                       ]),
                       _vm._v(" "),
+                      item.processed_at !== null
+                        ? _c("div", { staticClass: "row" }, [
+                            _vm._m(1, true, false),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-xs-6" }, [
+                              _c("label", { attrs: { for: "" } }, [
+                                _vm._v(": " + _vm._s(item.processed_at))
+                              ])
+                            ])
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c("div", { staticClass: "row" }, [
-                        _vm._m(1, true, false),
+                        _vm._m(2, true, false),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-xs-6" }, [
                           _c("label", { attrs: { for: "" } }, [
@@ -48423,7 +48626,7 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "row" }, [
-                        _vm._m(2, true, false),
+                        _vm._m(3, true, false),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-xs-6" }, [
                           _c("label", { attrs: { for: "" } }, [
@@ -48432,9 +48635,34 @@ var render = function() {
                         ])
                       ]),
                       _vm._v(" "),
-                      _vm._m(3, true, false),
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-xs-4" }, [
+                          _vm._v(
+                            "\r\n                                    Dibuat oleh\r\n                                "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-xs-6" }, [
+                          _c("label", { attrs: { for: "" } }, [
+                            _vm._v(": " + _vm._s(item.staf_pembelian.nama_user))
+                          ])
+                        ])
+                      ]),
                       _vm._v(" "),
-                      _vm._m(4, true, false)
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-xs-4" }, [
+                          _vm._v(
+                            "\r\n                                    Status\r\n                                "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-xs-6" }, [
+                          _c("label", { attrs: { for: "" } }, [
+                            _vm._v(": "),
+                            _c("i", [_vm._v(_vm._s(item.status))])
+                          ])
+                        ])
+                      ])
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-sm-6" }, [
@@ -48447,7 +48675,7 @@ var render = function() {
                             "table table-condensed table-hover table-bordered"
                         },
                         [
-                          _vm._m(5, true, false),
+                          _vm._m(4, true, false),
                           _vm._v(" "),
                           _c(
                             "tbody",
@@ -48472,30 +48700,66 @@ var render = function() {
                                 ])
                               }),
                               _vm._v(" "),
-                              _vm._m(6, true, false)
+                              _c("tr", [
+                                _vm._m(5, true, false),
+                                _vm._v(" "),
+                                _c("td", { staticClass: "text-center" }, [
+                                  _vm._v("Rp. " + _vm._s(item.total_rupiah))
+                                ])
+                              ])
                             ],
                             2
                           )
                         ]
                       ),
                       _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-large btn-primary pull-right",
-                          attrs: {
-                            href: "#myModal",
-                            role: "button",
-                            "data-toggle": "modal"
-                          },
-                          on: {
-                            click: function($event) {
-                              _vm.testModal(item.ppsv_id)
-                            }
-                          }
-                        },
-                        [_vm._v("Approve")]
-                      )
+                      _c("div", { staticClass: "col-xs-offset-9 col-xs-1" }, [
+                        _c("div", { staticClass: "form-group" }, [
+                          item.processed_at == null
+                            ? _c(
+                                "a",
+                                {
+                                  staticClass:
+                                    "btn btn-large btn-primary pull-right",
+                                  attrs: {
+                                    href: "#myModal",
+                                    role: "button",
+                                    "data-toggle": "modal"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.showModal(item.ppsv_id, "a")
+                                    }
+                                  }
+                                },
+                                [_vm._v("Approve")]
+                              )
+                            : _vm._e()
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group" }, [
+                        item.processed_at == null
+                          ? _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "btn btn-large btn-danger pull-right",
+                                attrs: {
+                                  href: "#myModal",
+                                  role: "button",
+                                  "data-toggle": "modal"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    _vm.showModal(item.ppsv_id, "r")
+                                  }
+                                }
+                              },
+                              [_vm._v("Reject")]
+                            )
+                          : _vm._e()
+                      ])
                     ])
                   ])
                 ])
@@ -48505,61 +48769,130 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _c("div", { staticClass: "modal fade", attrs: { id: "myModal" } }, [
-        _c("div", { staticClass: "modal-dialog" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _vm._m(7, false, false),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.ppsv_id,
-                    expression: "ppsv_id"
-                  }
-                ],
-                attrs: { type: "hidden" },
-                domProps: { value: _vm.ppsv_id },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.ppsv_id = $event.target.value
-                  }
-                }
-              }),
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          staticStyle: { "z-index": "9999999999999999 !important" },
+          attrs: { id: "myModal" }
+        },
+        [
+          _c("div", { staticClass: "modal-dialog" }, [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(6, false, false),
               _vm._v(" "),
-              _c("p", [
-                _vm._v("Apakah anda yakin ingin menyetujui permintaan?")
+              _c("div", { staticClass: "modal-body" }, [
+                _vm.jenis_approval == "a"
+                  ? _c("div", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.ppsv_id,
+                            expression: "ppsv_id"
+                          }
+                        ],
+                        attrs: { type: "hidden" },
+                        domProps: { value: _vm.ppsv_id },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.ppsv_id = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v("Apakah anda yakin ingin menyetujui permintaan?")
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.jenis_approval == "r"
+                  ? _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Alasan penolakan :")
+                      ]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.alasanReject,
+                            expression: "alasanReject"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { cols: "30", rows: "10" },
+                        domProps: { value: _vm.alasanReject },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.alasanReject = $event.target.value
+                          }
+                        }
+                      })
+                    ])
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _vm.jenis_approval == "a"
+                  ? _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "button", "data-dismiss": "modal" }
+                        },
+                        [_vm._v("Tidak")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button", "data-dismiss": "modal" },
+                          on: { click: _vm.confirmApprove }
+                        },
+                        [_vm._v("YA")]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.jenis_approval == "r"
+                  ? _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default",
+                          attrs: { type: "button", "data-dismiss": "modal" }
+                        },
+                        [_vm._v("Batal")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button", "data-dismiss": "modal" },
+                          on: { click: _vm.confirmReject }
+                        },
+                        [_vm._v("Selesai")]
+                      )
+                    ])
+                  : _vm._e()
               ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-footer" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-default",
-                  attrs: { type: "button", "data-dismiss": "modal" }
-                },
-                [_vm._v("Tidak")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  attrs: { type: "button", "data-dismiss": "modal" },
-                  on: { click: _vm.confirmApprove }
-                },
-                [_vm._v("YA")]
-              )
             ])
           ])
-        ])
-      ])
+        ]
+      )
     ],
     2
   )
@@ -48571,6 +48904,14 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-xs-4" }, [
       _c("p", [_vm._v("Tanggal Permintaan")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-4" }, [
+      _c("p", [_vm._v("Diproses Pada Tanggal")])
     ])
   },
   function() {
@@ -48593,41 +48934,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-xs-4" }, [
-        _vm._v(
-          "\r\n                                    Dibuat oleh\r\n                                "
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-xs-6" }, [
-        _c("label", { attrs: { for: "" } }, [_vm._v(": ( MIRZA )")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-xs-4" }, [
-        _vm._v(
-          "\r\n                                    Status\r\n                                "
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-xs-6" }, [
-        _c("label", { attrs: { for: "" } }, [
-          _vm._v(": "),
-          _c("i", [_vm._v("Menunggu Persetujuan")])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("Valas")]),
@@ -48644,12 +48950,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("td", { attrs: { colspan: "3" } }, [
-        _c("span", { staticClass: "pull-right" }, [_vm._v("Total:")])
-      ]),
-      _vm._v(" "),
-      _c("td", { staticClass: "text-center" }, [_vm._v("Rp. 250.000.000,00-")])
+    return _c("td", { attrs: { colspan: "3" } }, [
+      _c("span", { staticClass: "pull-right" }, [_vm._v("Total:")])
     ])
   },
   function() {

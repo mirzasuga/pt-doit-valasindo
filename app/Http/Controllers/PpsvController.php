@@ -65,8 +65,12 @@ class PpsvController extends Controller
     function approve(Request $request) {
 
         $ppsv = Ppsv::find($request->ppsv_id);
+        $ppsv->status = 'A';
+        $ppsv->processed_at = date('Y-m-d H:i:s');
+        $ppsv->approved_by = Auth::user()->nama_user;
+        
         // EVENT Ketika approve send email ke user yg meminta permintaan
-        if( $ppsv->approve() ) {
+        if( $ppsv->save() ) {
             return response()->json([
                 'status'    => 200,
                 'message'   => 'Berhasil melakukan approval'
@@ -78,8 +82,43 @@ class PpsvController extends Controller
         ]);
 
     }
-    function reject($ppsv_id) {
-        
+    function reject(Request $request) {
+        $ppsv_id = $request->ppsv_id;
+        $alasan  = $request->alasan;
+
+        $ppsv    = Ppsv::find($ppsv_id);
+        $ppsv->status       = 'R';
+        $ppsv->processed_at = date('Y-m-d H:i:s');
+        $ppsv->approved_by  = Auth::user()->nama_user;
+        $created = $ppsv->ppsvMessage()->create([
+            'body'  => $alasan,
+        ]);
+        if( $ppsv->save() && $created ) {
+            
+            return response()->json([
+                'status'    => 200,
+                'message'   => 'Berhasil melakukan reject',
+                'data'      => $request->all()
+            ]);
+        }
+        return response()->json([
+            'status'    => 500,
+            'message'   => 'Gagal melakukan reject',
+        ]);
+    }
+    function viewed($ppsv_id) {
+        $ppsv = Ppsv::find($ppsv_id);
+        $ppsv->viewed_at = date('Y-m-d H:i:s');
+        if( $ppsv->save() ) {
+            return response()->json([
+                'status'    => 200,
+                'message'   => 'Viewed'
+            ]);
+        }
+        return response()->json([
+            'status'    => 500,
+            'message'   => 'Failed'
+        ]);
     }
     
     /**
@@ -96,6 +135,16 @@ class PpsvController extends Controller
         )->get();
         return response()->json([
             'approvals' => $ppsv
+        ]);
+    }
+    function filter($status,$tanggal) {
+        $ppsv = Ppsv::status($status)->tanggal($tanggal)
+        ->with('detilPpsv','mitra','stafPembelian')
+        ->get();
+        return response()->json([
+            'status'    => 200,
+            'ppsv'      => $ppsv,
+            'message'   => 'Success'
         ]);
     }
     function detil($ppsv_id) {

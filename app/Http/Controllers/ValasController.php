@@ -12,7 +12,8 @@ use View;
 class ValasController extends Controller
 {
     function __construct() {
-        $this->middleware('role:index-valas');
+        $this->middleware('auth');
+        //$this->middleware('role:index-valas');
     }
     function index(Request $request) {
         // if( $request->ajax() ) {
