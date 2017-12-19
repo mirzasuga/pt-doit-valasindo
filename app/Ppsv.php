@@ -42,7 +42,10 @@ class Ppsv extends Model
     function stafPembelian() {
         return $this->belongsTo(User::class,'who_request','user_id');
     }
-    
+    function search($q) {
+        return $this->where('ppsv_id','like','%'.$q.'%');
+    }
+
 
 /**
  * ==========
@@ -72,6 +75,9 @@ function getStatusAttribute($status) {
             return $query;
         }
         return $query->where('status',$param);
+    }
+    function scopeApproved($query,$param) {
+        return $query->where('status','A')->where('ppsv_id',$param);
     }
     function scopeTanggal($query,$param) {
         if($param === '0000-00-00') {

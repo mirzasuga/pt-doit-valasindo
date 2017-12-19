@@ -24,6 +24,8 @@ import Mitra from './components/Mitra.vue';
 import Penukaran from './components/Penukaran.vue';
 import Ppsv from './components/Ppsv.vue';
 import Approvalitem from './components/Approvalitem.vue';
+import Btupsvform from './components/Btupsvform.vue';
+import ModalCariPpsv from './components/ModalCariPpsv.vue';
 
 import Approval from './components/Approval/Approval.vue';
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrftoken;
@@ -37,7 +39,8 @@ const app = new Vue({
         Penukaran,
         Ppsv,
         Approvalitem,
-        Approval
+        Approval,
+        Btupsvform
     },
     created() {
         this.$http.get(configURLs).then(res => {
@@ -51,3 +54,4 @@ const app = new Vue({
     methods: {
     }
 });
+

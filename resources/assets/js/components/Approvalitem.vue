@@ -113,13 +113,15 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="col-xs-offset-9 col-xs-1">
-                                <div class="form-group">
-                                    <a href="#myModal" role="button" class="btn btn-large btn-primary pull-right" data-toggle="modal" v-if="item.processed_at ==null"" v-on:click="showModal(item.ppsv_id,'a')">Approve</a>
+                            <div v-if="userRole=='DIREKSI'">
+                                <div class="col-xs-offset-9 col-xs-1">
+                                    <div class="form-group">
+                                        <a href="#myModal" role="button" class="btn btn-large btn-primary pull-right" data-toggle="modal" v-if="item.processed_at ==null" v-on:click="showModal(item.ppsv_id,'a')">Approve</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <a href="#myModal" role="button" class="btn btn-large btn-danger pull-right" data-toggle="modal" v-if="item.processed_at ==null"" v-on:click="showModal(item.ppsv_id,'r')">Reject</a>
+                                <div class="form-group">
+                                    <a href="#myModal" role="button" class="btn btn-large btn-danger pull-right" data-toggle="modal" v-if="item.processed_at ==null" v-on:click="showModal(item.ppsv_id,'r')">Reject</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -188,10 +190,11 @@
                     name:'Ditolak'
                 },
                 ],
-                filter_status:'',
+                filter_status:'u',
                 filter_tanggal:'',
                 jenis_approval:'',
                 alasanReject: '',
+                userRole:'',
             }
         },
         watch: {
@@ -199,6 +202,7 @@
                 console.log(val);
                 if(val) {
                     this.fetchPpsv();
+                    this.cekRole();
                     console.log('router is ready');
                 }
             },
@@ -208,6 +212,15 @@
             },
             filter_tanggal:function(val) {
                 this.filterPpsv();
+            },
+            userRole:function(role) {
+                if(role === 'TELLER') {
+                    this.statuses = [{
+                        value : 'a',
+                        name  : 'Disetujui'
+                    }];
+                    this.filter_status = 'a';
+                }
             }
         },
         created() {
@@ -216,6 +229,12 @@
         methods: {
             buildHrefUrl(id) {
                 return '#'+id;
+            },
+            cekRole() {
+                let url = this.urls.cek_role;
+                this.$http.get(url).then( res => {
+                    this.setRole( res.data.role );
+                });
             },
             eventViewed(ppsv_id) {
                 let is_viewed = true;
@@ -237,7 +256,7 @@
                 });
             },
             fetchPpsv() {
-                let url = this.urls.ppsv_all+'u';
+                let url = this.urls.ppsv_all+this.filter_status;
                 this.$http.get(url).then(res => {
                     console.log(res.data.approvals);
                     this.approvals = res.data.approvals;
@@ -261,6 +280,9 @@
                     this.urls = res.data.urls;
                     this.setRouterIsReady(true);
                 });
+            },
+            setRole(role) {
+                this.userRole = role;
             },
             setRouterIsReady(statement) {
                 this.routerIsReady = statement;

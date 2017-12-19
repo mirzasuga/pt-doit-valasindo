@@ -16,6 +16,7 @@ Route::get('/url/valas', function() {
         'urls' => [
             'put_valas_all'         => route("put_valas_all"),
             'put_valas_rate'        => route("put_valas_rate",['prefix' => null]),
+            'valas_edit'            => route("valas_edit"),
             'put_mitra_all'         => route("mitra_all"),
             'penukaran_store'       => route("penukaran_store"),
             'kuitansi_cetak'        => route("kuitansi_cetak",['tukar_id' => null]),
@@ -23,9 +24,17 @@ Route::get('/url/valas', function() {
             'ppsv_store'            => route("ppsv_store"),
             'ppsv_all'              => route("ppsv_all",['status' => null]),
             'ppsv_approve'          => route("ppsv_approve"),
+            'ppsv_approved'         => route("ppsv_approved",['ppsv_id' => null]),
             'ppsv_reject'           => route("ppsv_reject"),
             'ppsv_filter'           => route("ppsv_filter",['status' => null,'tanggal' => null]),
             'ppsv_viewed'           => route("ppsv_viewed",['ppsv_id' => null]),
+
+            'btupsv_store'          => route("btupsv_store"),
+            'btupsv_cetak'          => route("btupsv_cetak",['btupsv_id' => null]),
+
+            'put_user_all'     => route("put_user_all",['jenis' => null]),
+
+            'cek_role'              => route('cek_role'),
         ],
     ];
     return response()->json($data);
@@ -64,8 +73,9 @@ Route::get('/dashboard/',[
 
 Route::group(['prefix' => 'dashboard/valas'], function() {
     Route::get('/' , [
-        'uses' => 'ValasController@index',
-        'as'   => 'valas_index'
+        'uses'          => 'ValasController@index',
+        'as'            => 'valas_index',
+        'middleware'    => 'role:valas-index'
     ]);
     Route::post('/store',[
         'uses' => 'ValasController@store',
@@ -80,6 +90,11 @@ Route::group(['prefix' => 'dashboard/valas'], function() {
     Route::post('/cari',[
         'uses'=> 'ValasController@cari',
         'as'  => 'valas_cari'
+    ]);
+    Route::post('edit',[
+        'uses'          => 'ValasController@edit',
+        'as'            => 'valas_edit',
+        'middleware'    => 'role:valas-edit'
     ]);
 });
 
@@ -171,6 +186,11 @@ Route::group(['prefix' => 'dashboard/permintaan-pembelian-stok-valas/'], functio
         'as'            => 'ppsv_store',
         'middleware'    => 'role:ppsv-store'
     ]);
+    Route::get('/status', [
+        'uses'          => 'PpsvController@statusPermintaan',
+        'as'            => 'ppsv_status_view',
+        'middleware'    => 'role:ppsv-status-view',
+    ]);
     Route::get('/approvals',[
         'uses'          => 'PpsvController@approvals',
         'as'            => 'ppsv_approvals',
@@ -195,6 +215,11 @@ Route::group(['prefix' => 'dashboard/permintaan-pembelian-stok-valas/'], functio
         'uses'          => 'PpsvController@approve',
         'as'            => 'ppsv_approve',
         'middleware'    => 'role:ppsv-approve'
+    ]);
+    Route::get('/approved/{ppsv_id}',[
+        'uses'          => 'PpsvController@approved',
+        'as'            => 'ppsv_approved',
+        'middleware'    => 'role:ppsv-approved'
     ]);
     Route::get('/viewed/{ppsv_id}', [
         'uses'          => 'PpsvController@viewed',
@@ -221,6 +246,42 @@ Route::group(['prefix' => 'kurs'], function() {
     ]);
 });
 
+
+/**
+ * =========
+ * BTUPSV
+ * =========
+ */
+Route::group(['prefix' => '/dashboard/btupsv'], function() {
+    Route::get('/', [
+        'uses'      => 'BtupsvController@index',
+        'as'        => 'btupsv_index'
+    ]);
+    Route::post('/store', [
+        'uses'          => 'BtupsvController@store',
+        'as'            => 'btupsv_store',
+        'middleware'    => 'role:btupsv-store',
+    ]);
+    Route::get('/cetak/{btupsv_id}', [
+        'uses'          => 'BtupsvController@cetak',
+        'as'            => 'btupsv_cetak'
+    ]);
+});
+
+
+
+/**
+ * =========
+ *  USER
+ * =========
+ */
+Route::group(['prefix' => 'users'], function() {
+    Route::get('/find-all/{jenis}',[
+        'uses'     => 'UserController@findAll',
+        'as'       => 'put_user_all'
+    ]);
+});
+
 Route::get('/test', function() {
     return 'okeeee';
 })->middleware('role:view-kurs');
@@ -242,3 +303,8 @@ Route::get('/beautify/{role_id}',function($role_id) {
     $user = Auth::user()->roles()->get();
     return response()->json($user);
 });
+
+Route::get('user/cek-role', [
+    'uses'  => 'UserController@cekRole',
+    'as'    => 'cek_role'
+]);

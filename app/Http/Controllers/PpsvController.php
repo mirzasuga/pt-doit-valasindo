@@ -24,6 +24,9 @@ class PpsvController extends Controller
     function approvals() {
         return view('ppsv.approval');
     }
+    function statusPermintaan() {
+        return view('ppsv.status');
+    }
 
 
 
@@ -138,6 +141,9 @@ class PpsvController extends Controller
         ]);
     }
     function filter($status,$tanggal) {
+        if( Auth::user()->roles()->first()->jenis === 'TELLER' ) {
+            $status = 'A';
+        }
         $ppsv = Ppsv::status($status)->tanggal($tanggal)
         ->with('detilPpsv','mitra','stafPembelian')
         ->get();
@@ -149,6 +155,20 @@ class PpsvController extends Controller
     }
     function detil($ppsv_id) {
 
+    }
+    function approved($ppsv_id) {
+        $ppsv = Ppsv::approved($ppsv_id)->get();
+        return response()->json([
+            'status'    => 200,
+            'ppsv'      => $ppsv,
+        ]);
+    }
+    function search($q) {
+        $ppsv = Ppsv::search($q)->get();
+        return response()->json([
+            'status'    => 200,
+            'ppsv'      => $ppsv
+        ]);
     }
     
     

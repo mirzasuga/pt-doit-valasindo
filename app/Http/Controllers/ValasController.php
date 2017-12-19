@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreValas;
 use Gate;
 use App\Valas;
 use Auth;
@@ -21,7 +22,18 @@ class ValasController extends Controller
         // }
         return view('valas.index');
     }
-    function store(Request $request) {
+    function edit(StoreValas $request) {
+        $valas = Valas::find($request->valas_id);
+        $valas->prefix      = $request->prefix;
+        $valas->nama_valas  = $request->nama_valas;
+        $valas->stok        = $request->stok;
+        $valas->deskripsi   = $request->deskripsi;
+        if( $valas->save() ) {
+            return response()->json(['data' => $request->all()]);
+        }
+        return response(500)->json(['message' => 'Terjadi kesalahan saat mengubah data valas']);
+    }
+    function store(StoreValas $request) {
         $stored = Valas::create([
             'nama_valas' => $request->nama_valas,
             'prefix'    => $request->prefix,
