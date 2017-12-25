@@ -40,22 +40,64 @@
                     </div>
                     <div class="container">
                         <div class="col-lg-12 body_cetak">
-                            <h3 class="text-center">Bukti Terima Uang Pembelian Stok Valas</h3>
+                            <h3 class="text-center"><strong>BUKTI TERIMA UANG PEMBELIAN STOK VALAS</strong></h3>
                             <hr>
                             <div class="row body_heading">
-                                <div class="col-lg-4">
-                                    <p>No:BKT/1/2017;</p>
+                            
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <p>No: BKT/[NOMORSURAT]/2017;</p>
+                                    <br>
+                                    <label for="">To: </label>
+                                    <p>
+                                        [Penerima]
+                                        <br>
+                                        [Jenis staff]
+                                    </p>
                                 </div>
-                                <div class="col-lg-offset-4 col-lg-4">
-                                    <p>Jakart,dd-mm-yyyy</p>
+                                <div class="col-xs-8 col-sm-6 col-md-8 col-lg-8">
+                                    <p class="pull-right">Jakart, {{ date('d-m-Y') }}</p>
                                 </div>
                             </div>
                                 <p align="left" style="padding-left:30px;">
-                                    Berikut ini adalah bukti terima uang yang diberikan oleh: <strong>(Nama Teller)</strong>
-                                    untuk digunakan sebagaimana mestinya
-                                    
-                                    sebesar: <strong>Rp,999.999.999,99</strong>
+                                    Pada (tanggal) berdasarkan Surat Permintaan Pembelian Stok Valas yang telah disetujui dengan nomor permintaan <strong>(nomor permintaan)</strong>,
+                                    kami yang bertanda tangan dibawah ini :
                                 </p>
+                                <ol>
+                                    <div class="row">
+                                        <li>
+                                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                                Nama<br>  
+                                                NIK<br>
+                                                Jabatan<br> 
+                                                Alamat<br>
+                                            </div>
+                                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                : (nama teller) <br>
+                                                : (nik) <br>
+                                                : TELLER <br>
+                                                : (alamat teller) , yang selanjutnya disebut sebagai <u>PIHAK PERTAMA</u>
+                                            </div>
+                                        </li>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <li>
+                                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                                Nama<br>  
+                                                NIK<br>
+                                                Jabatan<br> 
+                                                Alamat<br>
+                                            </div>
+                                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                : (Nama Staff Purchasing) <br>
+                                                : (nik) <br>
+                                                : Staf Purchasing <br>
+                                                : (alamat staf purchasing) , yang selanjutnya disebut sebagai <u>PIHAK KEDUA</u>
+                                            </div>
+                                        </li>
+                                    </div>
+                                </ol>
+                                <p>Dengan ini kedua belah pihak, mengadakan serah terima uang sebesar <b>Rp, 999.999.999</b> untuk pembelian stok valas oleh PIHAK KEDUA.</p>
                         </div>
                     </div>
                     <div class="container">

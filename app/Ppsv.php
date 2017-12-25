@@ -32,9 +32,10 @@ class Ppsv extends Model
     function detilPpsv() {
         return $this->belongsToMany(Kurs::class,'kurs_ppsv','ppsv_id','kurs_id')->withPivot('amount','nominal_rupiah','rate')->with('valas');
     }
-    // function valas() {
-    //     return $this->hasManyThrough(Kurs::class,)
-    // }
+    function kurs() {
+        //return $this->hasManyThrough(Valas::class,Kurs::class,'kurs_id','valas_id','ppsv_id');
+        return $this->belongsToMany(Kurs::class,'kurs_ppsv','ppsv_id','kurs_id');
+    }
     
     function detilPermintaan() {
         return $this->kurs()->withPivot('amount','nominal_rupiah','rate');
@@ -44,6 +45,11 @@ class Ppsv extends Model
     }
     function search($q) {
         return $this->where('ppsv_id','like','%'.$q.'%');
+    }
+
+    function done() {
+        $this->status = 'D';
+        return $this->save();
     }
 
 

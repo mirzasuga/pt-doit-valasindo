@@ -6,6 +6,7 @@
 /.idea
 /.vagrant
 /vendor
+/public/images
 .gitignore
 Homestead.json
 Homestead.yaml

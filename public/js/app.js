@@ -13635,7 +13635,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(16);
-module.exports = __webpack_require__(66);
+module.exports = __webpack_require__(69);
 
 
 /***/ }),
@@ -13660,6 +13660,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_ModalCariPpsv_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_ModalCariPpsv_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Approval_Approval_vue__ = __webpack_require__(63);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Approval_Approval_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_Approval_Approval_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_Bbsv_Bbsv_vue__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_Bbsv_Bbsv_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_Bbsv_Bbsv_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_Bbsv_Uploadkuitansi_vue__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_Bbsv_Uploadkuitansi_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_Bbsv_Uploadkuitansi_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_Bbsv_BbsvForm_vue__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_Bbsv_BbsvForm_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__components_Bbsv_BbsvForm_vue__);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -13670,7 +13676,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 __webpack_require__(17);
 
 window.Vue = __webpack_require__(5);
-
+//window.bus = bus;
 Vue.use(__webpack_require__(8));
 Vue.use(__webpack_require__(41));
 
@@ -13690,9 +13696,12 @@ Vue.use(__webpack_require__(41));
 
 
 
+
+
+
+
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrftoken;
 window.routerIsReady = false;
-
 var app = new Vue({
     el: '#app',
     components: {
@@ -13702,7 +13711,10 @@ var app = new Vue({
         Ppsv: __WEBPACK_IMPORTED_MODULE_3__components_Ppsv_vue___default.a,
         Approvalitem: __WEBPACK_IMPORTED_MODULE_4__components_Approvalitem_vue___default.a,
         Approval: __WEBPACK_IMPORTED_MODULE_7__components_Approval_Approval_vue___default.a,
-        Btupsvform: __WEBPACK_IMPORTED_MODULE_5__components_Btupsvform_vue___default.a
+        Btupsvform: __WEBPACK_IMPORTED_MODULE_5__components_Btupsvform_vue___default.a,
+        Bbsv: __WEBPACK_IMPORTED_MODULE_8__components_Bbsv_Bbsv_vue___default.a
+        // Uploadkuitansi,
+        //BbsvForm,
     },
     created: function created() {
         this.$http.get(configURLs).then(function (res) {
@@ -50089,9 +50101,1066 @@ if (false) {
 
 /***/ }),
 /* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(67)
+/* template */
+var __vue_template__ = __webpack_require__(68)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Bbsv\\Uploadkuitansi.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7f5efeaa", Component.options)
+  } else {
+    hotAPI.reload("data-v-7f5efeaa", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  //name:'Uploadkuitansi',
+  props: ['img'],
+  data: function data() {
+    return {
+      urls: [],
+      image: 'https://www.metatube.com/assets/metatube/video/img/Upload.svg',
+      uploadIsDone: false
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    this.$http.get(configURLs).then(function (res) {
+      _this.urls = res.data.urls;
+    });
+  },
+
+  events: {
+    eventIsReadyToUpload: function eventIsReadyToUpload(arg) {
+      console.log('from events');
+    }
+  },
+  methods: {
+    onFileChange: function onFileChange(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files) {
+        return;
+      }
+      this.createImage(files[0]);
+      //this.$emit('eventIsReadyToUpload',this.image);
+    },
+    createImage: function createImage(file) {
+      var _this2 = this;
+
+      var reader = new FileReader();
+      var vm = this;
+      reader.onload = function (e) {
+        vm.image = e.target.result;
+        _this2.$emit('eventIsReadyToUpload', e.target.result);
+      };
+      reader.readAsDataURL(file);
+      //console.log(vm);
+    },
+    changeImage: function changeImage(event) {
+      console.log(event);
+    }
+  }
+});
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "panel panel-default" }, [
+    _c("div", { staticClass: "panel-body" }, [
+      _c("label", { attrs: { for: "" } }, [_vm._v("Kuitansi Pembelian")]),
+      _vm._v(" "),
+      _c("label", { staticClass: "btn btn-default" }, [
+        _c("img", {
+          staticClass: "upload-pre-md",
+          attrs: { id: "prev_kuit", src: _vm.image, alt: "Pilih File Kuitansi" }
+        }),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "hidden",
+          attrs: {
+            type: "file",
+            name: "kuitansi_pembelian",
+            id: "file_kuitansi"
+          },
+          on: { change: _vm.onFileChange }
+        }),
+        _vm._v(" "),
+        _c("input", { attrs: { type: "hidden" } })
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7f5efeaa", module.exports)
+  }
+}
+
+/***/ }),
+/* 69 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(86)
+/* template */
+var __vue_template__ = __webpack_require__(87)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Bbsv\\BbsvForm.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6c663959", Component.options)
+  } else {
+    hotAPI.reload("data-v-6c663959", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Uploadkuitansi_vue__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Uploadkuitansi_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Uploadkuitansi_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    'uploadkuitansi': __WEBPACK_IMPORTED_MODULE_0__Uploadkuitansi_vue___default.a
+  },
+  created: function created() {
+    var _this = this;
+
+    this.$http.get(configURLs).then(function (res) {
+      _this.urls = res.data.urls;
+    });
+  },
+  data: function data() {
+    return {
+      urls: [],
+      ppsvs: [],
+      q_ppsv: '',
+      tgl_bbsv: '',
+      keterangan: '',
+      kuitansiWillUpload: '',
+      kuitansiUploaded: '',
+      no_permintaan: '',
+      detil_ppsv: [],
+      img: '',
+      storedData: [],
+
+      formComplete: false,
+      storedComplete: false
+    };
+  },
+
+  mounted: function mounted() {
+    this.checkFormComplete();
+  },
+  watch: {
+    q_ppsv: function q_ppsv(val) {
+      if (val !== '') {
+        this.fetchPpsv(val);
+      }
+    },
+    storedComplete: function storedComplete(val) {
+      console.log(val);
+      if (val) {
+        this.clearForm();
+        this.toggleModalSuccess();
+      }
+    },
+
+    tgl_bbsv: function tgl_bbsv(val) {
+      this.checkFormComplete();
+    },
+    no_permintaan: function no_permintaan(val) {
+      this.checkFormComplete();
+    },
+    keterangan: function keterangan(val) {
+      this.checkFormComplete();
+    },
+    kuitansiWillUpload: function kuitansiWillUpload(val) {
+      this.checkFormComplete();
+    }
+  },
+  methods: {
+    store: function store() {
+      this.uploadKuitansi();
+      this.storeBbsv();
+    },
+    clearForm: function clearForm() {
+      this.keterangan = '';
+      this.url_kuitansi = '';
+      this.detil_ppsv = '';
+      this.no_ppsv = '';
+      this.tgl_bbsv = '';
+      this.no_permintaan = '';
+      this.ppsv = [];
+      this.storedComplete = false;
+    },
+    fetchPpsv: function fetchPpsv(q) {
+      var _this2 = this;
+
+      var url = this.urls.ppsv_approved + '/' + q + '/detil';
+      this.$http.get(url).then(function (res) {
+        _this2.ppsvs = res.data.ppsv;
+      });
+    },
+    checkFormComplete: function checkFormComplete() {
+      if (this.tgl_bbsv !== '' && this.no_permintaan !== '' && this.keterangan !== '' && this.kuitansiWillUpload !== '') {
+        this.formComplete = true;
+      } else {
+        this.formComplete = false;
+      }
+    },
+    keyupQPpsv: function keyupQPpsv(value) {
+      console.log(value);
+    },
+    toggleModal: function toggleModal() {
+      $("#mrModal").modal('toggle');
+    },
+    toggleModalSuccess: function toggleModalSuccess() {
+      $("#mrModalSuccess").modal('toggle');
+    },
+    listenerIsReadyToUpload: function listenerIsReadyToUpload(file) {
+      this.kuitansiWillUpload = file;
+    },
+    setUploadedKuit: function setUploadedKuit(name) {
+      this.kuitansiUploaded = name;
+    },
+    uploadKuitansi: function uploadKuitansi() {
+      var _this3 = this;
+
+      var url = this.urls.bbsv_upload_kuitansi;
+      var file = {
+        kuitansi_pembelian: this.kuitansiWillUpload
+      };
+      this.$http.post(url, file).then(function (res) {
+        var data = res.data;
+        if (data.status == 200) {
+          _this3.setUploadedKuit(data.uploaded);
+        } else {
+          alert(data.message);
+        }
+      });
+    },
+    storeBbsv: function storeBbsv() {
+      var that = this;
+      setTimeout(function () {
+        if (that.kuitansiUploadTried < 3 && that.kuitansiUploaded == '') {
+          console.log('waiting file uploaded');
+          console.log(that.kuitansiUploadTried);
+          that.storeBbsv();
+          that.kuitansiUploadTried += 1;
+        } else {
+          if (that.kuitansiUploaded == '' && that.kuitansiUploadTried > 3) {
+            console.log('gagal upload');
+          } else {
+            var url = that.urls.bbsv_store;
+            var data = {
+              tgl_bbsv: that.tgl_bbsv,
+              keterangan: that.keterangan,
+              url_kuitansi: that.kuitansiUploaded,
+              detil_ppsv: that.detil_ppsv,
+              no_ppsv: that.no_permintaan
+            };
+            that.kuitansiUploadTried = 0;
+
+            that.$http.post(url, data).then(function (res) {
+              that.storedComplete = true;
+              that.storedData = res.data;
+            });
+          }
+        }
+      }, 1000);
+    },
+    ppsvSelected: function ppsvSelected(el) {
+      this.no_permintaan = el.ppsv_id;
+      this.detil_ppsv = el.detil_ppsv;
+      this.toggleModal();
+    },
+    refresh: function refresh() {
+      this.toggleModalSuccess();
+    }
+  }
+});
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("form", { attrs: { action: "", method: "POST", role: "form" } }, [
+    _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6 padding-5" },
+        [
+          _c("div", { staticClass: "panel panel-default" }, [
+            _c("div", { staticClass: "panel-body" }, [
+              _c("legend", [_vm._v("Form title")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Tanggal Bukti")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.tgl_bbsv,
+                            expression: "tgl_bbsv"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "date",
+                          name: "tgl_bbsv",
+                          id: "tgl_bbsv",
+                          placeholder: "Input field"
+                        },
+                        domProps: { value: _vm.tgl_bbsv },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.tgl_bbsv = $event.target.value
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Nomor Permintaan")
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.no_permintaan,
+                              expression: "no_permintaan"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "text",
+                            name: "no_permintaan",
+                            id: "no_permintaan",
+                            placeholder: "Input field",
+                            readonly: ""
+                          },
+                          domProps: { value: _vm.no_permintaan },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.no_permintaan = $event.target.value
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "input-group-btn" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-default",
+                              attrs: { type: "button" },
+                              on: { click: _vm.toggleModal }
+                            },
+                            [_vm._v("Cari Ppsv")]
+                          )
+                        ])
+                      ])
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Keterangan")
+                      ]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.keterangan,
+                            expression: "keterangan"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          name: "keterangan",
+                          id: "keterangan",
+                          cols: "30",
+                          rows: "4"
+                        },
+                        domProps: { value: _vm.keterangan },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.keterangan = $event.target.value
+                          }
+                        }
+                      })
+                    ])
+                  ]
+                )
+              ])
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" },
+        [
+          _c("uploadkuitansi", {
+            attrs: { img: _vm.img },
+            on: {
+              eventIsReadyToUpload: function($event) {
+                _vm.listenerIsReadyToUpload($event)
+              }
+            }
+          })
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-lg-12" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-body" }, [
+            _c("legend", [_vm._v("Detil Permintaan Pembelian Stok Valas")]),
+            _vm._v(" "),
+            _c(
+              "table",
+              {
+                staticClass: "table table-condensed table-hover table-bordered"
+              },
+              [
+                _vm._m(0, false, false),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.detil_ppsv, function(detil) {
+                    return _c("tr", [
+                      _c("td", [_vm._v(_vm._s(detil.valas.prefix))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(detil.pivot.amount))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(detil.pivot.rate))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(detil.pivot.nominal_rupiah))])
+                    ])
+                  })
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _vm.formComplete
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.store }
+                  },
+                  [_vm._v("Simpan")]
+                )
+              : _vm._e()
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        staticStyle: { "z-index": "9999999999999999 !important" },
+        attrs: { id: "mrModal" }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(1, false, false),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.q_ppsv,
+                      expression: "q_ppsv"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", name: "", id: "" },
+                  domProps: { value: _vm.q_ppsv },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.q_ppsv = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "table",
+                {
+                  staticClass:
+                    "table table-condensed table-hover table-bordered"
+                },
+                [
+                  _vm._m(2, false, false),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.ppsvs, function(ppsv) {
+                      return _c(
+                        "tr",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.ppsvSelected(ppsv)
+                            }
+                          }
+                        },
+                        [
+                          _c("td", [_vm._v(_vm._s(ppsv.ppsv_id))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(ppsv.status))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(ppsv.tgl_permintaan))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(ppsv.total_rupiah))])
+                        ]
+                      )
+                    })
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" })
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        staticStyle: { "z-index": "9999999999999999 !important" },
+        attrs: { id: "mrModalSuccess" }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(3, false, false),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("h4", [
+                _vm._v(
+                  "Berhasil menyimpan data Bukti Pembelian Stok Valas denan nomor BBSV:#" +
+                    _vm._s(_vm.storedData.bbsv_id)
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "Untuk mencetak bukti serah stok valas, silahkan klik tombol cetak"
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c("button", { staticClass: "btn btn-primary" }, [
+                _vm._v("Cetak")
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: { type: "button" },
+                  on: { click: _vm.refresh }
+                },
+                [_vm._v("Tutup")]
+              )
+            ])
+          ])
+        ])
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Valas")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Amount")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Rate")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Rupiah / Equivalent")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-hidden": "true"
+          }
+        },
+        [_vm._v("×")]
+      ),
+      _vm._v(" "),
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("(modaltitle)")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("No.PPSV")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Status")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Tanggal Permintaan")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total Rupiah")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-hidden": "true"
+          }
+        },
+        [_vm._v("×")]
+      ),
+      _vm._v(" "),
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("Notifikasi")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6c663959", module.exports)
+  }
+}
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(89)
+/* template */
+var __vue_template__ = __webpack_require__(90)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Bbsv\\Bbsv.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7ad040f5", Component.options)
+  } else {
+    hotAPI.reload("data-v-7ad040f5", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BbsvForm_vue__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BbsvForm_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__BbsvForm_vue__);
+//
+//
+//
+//
+
+// import Uploadkuitansi from './Uploadkuitansi.vue';
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+
+  components: {
+    'app-bbsv-form': __WEBPACK_IMPORTED_MODULE_0__BbsvForm_vue___default.a
+    // 'app-uploadkuitansi' : Uploadkuitansi
+  },
+  methods: {
+    testd: function testd() {
+      console.log('testd');
+    }
+  }
+});
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("app-bbsv-form")
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7ad040f5", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

@@ -8,7 +8,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-
+//window.bus = bus;
 Vue.use(require('vue-resource'));
 Vue.use(require('vue-js-modal'));
 
@@ -28,9 +28,13 @@ import Btupsvform from './components/Btupsvform.vue';
 import ModalCariPpsv from './components/ModalCariPpsv.vue';
 
 import Approval from './components/Approval/Approval.vue';
+import Bbsv from './components/Bbsv/Bbsv.vue';
+import Uploadkuitansi from './components/Bbsv/Uploadkuitansi.vue';
+import BbsvForm from './components/Bbsv/BbsvForm.vue';
+
+
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrftoken;
 window.routerIsReady = false;
-
 const app = new Vue({
     el: '#app',
     components:{
@@ -40,7 +44,10 @@ const app = new Vue({
         Ppsv,
         Approvalitem,
         Approval,
-        Btupsvform
+        Btupsvform,
+        Bbsv,
+        // Uploadkuitansi,
+        //BbsvForm,
     },
     created() {
         this.$http.get(configURLs).then(res => {

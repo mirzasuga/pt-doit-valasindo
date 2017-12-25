@@ -24,13 +24,17 @@ Route::get('/url/valas', function() {
             'ppsv_store'            => route("ppsv_store"),
             'ppsv_all'              => route("ppsv_all",['status' => null]),
             'ppsv_approve'          => route("ppsv_approve"),
-            'ppsv_approved'         => route("ppsv_approved",['ppsv_id' => null]),
+            'ppsv_approved'         => route("ppsv_approved",['ppsv_id' => null,'detil' => null]),
             'ppsv_reject'           => route("ppsv_reject"),
             'ppsv_filter'           => route("ppsv_filter",['status' => null,'tanggal' => null]),
             'ppsv_viewed'           => route("ppsv_viewed",['ppsv_id' => null]),
 
             'btupsv_store'          => route("btupsv_store"),
             'btupsv_cetak'          => route("btupsv_cetak",['btupsv_id' => null]),
+            
+            'bbsv_upload_kuitansi'  => route("bbsv_upload_kuitansi"),
+            'bbsv_store'            => route("bbsv_store"),
+
 
             'put_user_all'     => route("put_user_all",['jenis' => null]),
 
@@ -216,7 +220,7 @@ Route::group(['prefix' => 'dashboard/permintaan-pembelian-stok-valas/'], functio
         'as'            => 'ppsv_approve',
         'middleware'    => 'role:ppsv-approve'
     ]);
-    Route::get('/approved/{ppsv_id}',[
+    Route::get('/approved/{ppsv_id}/{detil}',[
         'uses'          => 'PpsvController@approved',
         'as'            => 'ppsv_approved',
         'middleware'    => 'role:ppsv-approved'
@@ -265,6 +269,30 @@ Route::group(['prefix' => '/dashboard/btupsv'], function() {
     Route::get('/cetak/{btupsv_id}', [
         'uses'          => 'BtupsvController@cetak',
         'as'            => 'btupsv_cetak'
+    ]);
+});
+
+/**
+ * BBSV
+ */
+Route::group(['prefix' => 'dashboard/bbsv'], function() {
+    Route::get('/',[
+        'uses'      => 'BbsvController@index'
+    ]);
+
+    Route::get('/entry',[
+        'uses'      => 'bbsv\BbsvController@entry',
+        'as'        => 'bbsv_entry',
+        //'middleware'=> 'role:bbsv-entry'
+    ]);
+
+    Route::post('/upload-kuitansi', [
+        'uses'      => 'bbsv\BbsvUploadController@upload',
+        'as'        => 'bbsv_upload_kuitansi'
+    ]);
+    Route::post('/store', [
+        'uses'      => 'bbsv\BbsvController@store',
+        'as'        => 'bbsv_store'
     ]);
 });
 

@@ -156,8 +156,13 @@ class PpsvController extends Controller
     function detil($ppsv_id) {
 
     }
-    function approved($ppsv_id) {
-        $ppsv = Ppsv::approved($ppsv_id)->get();
+    function approved($ppsv_id,$detil = null) {
+        if($detil == 'detil') {
+            $ppsv = Ppsv::approved($ppsv_id)->with('detilPpsv')->get();
+        }
+        else {
+            $ppsv = Ppsv::approved($ppsv_id)->get();
+        }
         return response()->json([
             'status'    => 200,
             'ppsv'      => $ppsv,
