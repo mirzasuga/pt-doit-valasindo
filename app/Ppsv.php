@@ -11,6 +11,7 @@ class Ppsv extends Model
     protected $fillable = [
         'tgl_permintaan',
         'keterangan',
+        'total_rupiah',
         'status',
         'processed_at',
         'viewed_at'
@@ -75,6 +76,13 @@ function getStatusAttribute($status) {
             break;
     }
 }
+// function getRelationsDetilPpsvPivotRateAttribute($value) {
+//     return ' edited';
+// }
+function getTotalRupiahAttribute($value) {
+    return number_format($value,0,'','.');
+}
+
 /**
  * =========
  *  SCOPE

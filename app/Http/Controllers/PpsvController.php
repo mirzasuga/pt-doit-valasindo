@@ -41,7 +41,7 @@ class PpsvController extends Controller
 
         $ppsv = new Ppsv;
         $ppsv->keterangan           = $request->keterangan;
-        $ppsv->total_rupiah         = $request->total_rupiah;
+        $ppsv->total_rupiah         = str_replace('.','',$request->total_rupiah);
         $ppsv->tgl_permintaan       = date('Y-m-d H:i:s');
         $ppsv->processed_at         = null;
         $ppsv->viewed_at            = null;
@@ -50,9 +50,9 @@ class PpsvController extends Controller
         if( $ppsv->save() ) {
             foreach($request->kurs_ppsv as $kurs) {
                 $ppsv->detilPpsv()->attach( $kurs['kurs_id'], [
-                    'amount'            => $kurs['amount'],
-                    'rate'              => $kurs['rate'],
-                    'nominal_rupiah'    => $kurs['rupiah'],
+                    'amount'            => str_replace('.','',$kurs['amount']),
+                    'rate'              => str_replace('.','',$kurs['rate']),
+                    'nominal_rupiah'    => str_replace('.','',$kurs['rupiah']),
                 ]);
             }
             return response()->json([

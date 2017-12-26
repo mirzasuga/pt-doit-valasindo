@@ -13796,7 +13796,31 @@ Vue.use(__webpack_require__(43));
 
 
 
+function TextBoxRupiah(param) {
+    this.element = $(param.id);
+    this.pemisah = param.pemisah;
+    this.init = function () {
+        var pemisah = this.pemisah;
+        this.element.keyup(function (event) {
+            // skip for arrow keys
+            if (event.which >= 37 && event.which <= 40) return;
+            // format number
+            $(this).val(function (index, value) {
+                return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, pemisah);
+            });
+        });
+    };
+}
+
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrftoken;
+Vue.mixin({
+    methods: {
+        formatCurr: function formatCurr(value) {
+            var val = (value / 1).toFixed(2).replace('.', ',');
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+    }
+});
 window.routerIsReady = false;
 var app = new Vue({
     el: '#app',
@@ -47612,6 +47636,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     watch: {
+        rows: function rows(val) {
+            this.hitungTotal();
+        },
         URLS: function URLS(val) {
             if (val.length !== 0) {
                 this.fetchMitra();
@@ -47635,6 +47662,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
+        formatCurr: function formatCurr(value) {
+            var val = (value / 1).toFixed(0).replace('.', '');
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        },
+        numbfor: function numbfor(val) {
+            var value = val;
+            var replaced = value.replace(/\./g, '');
+            return parseInt(replaced);
+        },
         dangerClass: function dangerClass() {
             return {
                 'alert alert-danger': this.hasErrors,
@@ -47689,8 +47725,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.hitungRupiah();
             this.hitungTotal();
         },
-        onChangeAmount: function onChangeAmount() {
-            this.hitungRupiah();
+        onChangeAmount: function onChangeAmount(idx) {
+            if (this.rows[idx].amount === '') {
+                this.rows[idx].amount = 0;
+            } else {
+                var rp = this.numbfor(this.rows[idx].amount);
+                this.rows[idx].amount = this.formatCurr(rp);
+            }
+            this.hitungRupiah(idx);
             this.hitungTotal();
         },
         putAllValas: function putAllValas() {},
@@ -47754,34 +47796,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.prefixOnRequest = false;
         },
         setRate: function setRate(idx, val) {
-            this.rows[idx].rate = val;
+            this.rows[idx].rate = this.formatCurr(val);
         },
         setKursId: function setKursId(idx, val) {
             this.rows[idx].kurs_id = val;
         },
-        hitungRupiah: function hitungRupiah() {
-            if (this.rows.length >= 1) {
-                this.rows.map(function (row) {
-                    row.rupiah = row.rate * row.amount;
-                });
-            }
+        hitungRupiah: function hitungRupiah(idx) {
+            var row = this.rows[idx];
+            var rupiah = this.numbfor(row.rate) * this.numbfor(row.amount);
+            this.rows[idx].rupiah = this.formatCurr(rupiah);
         },
         hitungTotal: function hitungTotal() {
+            var _this5 = this;
+
             if (this.rows.length > 1) {
                 var total = 0;
                 this.rows.map(function (row) {
-                    total += row.rupiah;
+                    total += _this5.numbfor(row.rupiah);
                 });
                 this.total = total;
             } else if (this.rows.length == 1) {
-                this.total = this.rows[0].rupiah;
+                this.total = this.numbfor(this.rows[0].rupiah);
             } else {
                 this.total = 0;
             }
             console.log(this.total);
         },
         simpan: function simpan() {
-            var _this5 = this;
+            var _this6 = this;
 
             var url = this.URLS.ppsv_store;
             var postData = {
@@ -47793,17 +47835,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
             this.$http.post(url, postData).then(function (response) {
                 if (response.data.status === 200) {
-                    _this5.clearForm();
+                    _this6.clearForm();
                     //this.cetakKuitansi();
                     alert(response.data.message);
                     //this.requestKuitansi(response.data.tukar_id);
-                    _this5.hasErrors = false;
+                    _this6.hasErrors = false;
                     console.log(response.data);
                 } else {}
             }, function (response) {
                 if (response.status == 422) {
                     alert(response.body.errors.kurs_penukaran);
-                    _this5.showErrors(response.body.errors);
+                    _this6.showErrors(response.body.errors);
                 }
             });
             console.log(url);
@@ -48138,7 +48180,9 @@ var render = function() {
                                   },
                                   domProps: { value: row.amount },
                                   on: {
-                                    keyup: _vm.onChangeAmount,
+                                    keyup: function($event) {
+                                      _vm.onChangeAmount(idx)
+                                    },
                                     input: function($event) {
                                       if ($event.target.composing) {
                                         return
@@ -48272,7 +48316,7 @@ var render = function() {
                           _c("td", { attrs: { id: "total", colspan: "2" } }, [
                             _vm._v(
                               "\r\n                                        Total : Rp, " +
-                                _vm._s(_vm.total) +
+                                _vm._s(_vm.formatCurr(_vm.total)) +
                                 "\r\n                                    "
                             )
                           ])

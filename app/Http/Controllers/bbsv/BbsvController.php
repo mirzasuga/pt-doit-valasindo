@@ -47,8 +47,9 @@ class BbsvController extends Controller
     }
 
     function cetak($bbsvId) {
-        $bbsv = Bbsv::find($bbsvId);
+        $bbsv = Bbsv::findOrFail($bbsvId);
         $ppsv = $bbsv->ppsv->detilPermintaan()->get();
+        
         //dd($ppsv);
         return view('bbsv.cetak',[
             'bbsv'=> $bbsv,

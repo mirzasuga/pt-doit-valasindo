@@ -86,7 +86,7 @@
                                     <td>
                                         <div class="input-group">
                                             <span class="input-group-addon" id="basic-addon1">{{ row.prefix }}</span>
-                                            <input v-model="row.amount" v-on:keyup="onChangeAmount" type="text" class="form-control" placeholder="0" aria-describedby="basic-addon1">
+                                            <input v-model="row.amount" v-on:keyup="onChangeAmount(idx)" type="text" class="form-control" placeholder="0" aria-describedby="basic-addon1">
                                         </div>
                                     </td>
                                     <td>
@@ -113,7 +113,7 @@
                                         Jumlah Total
                                     </td>
                                     <td id="total" colspan="2">
-                                        Total : Rp, {{ total }}
+                                        Total : Rp, {{ formatCurr(total) }}
                                     </td>
                                 </tr>
                                 
@@ -170,6 +170,9 @@
             }
         },
         watch: {
+            rows:function(val) {
+                this.hitungTotal();
+            },
             URLS: function(val) {
                 if(val.length !== 0) {
                     this.fetchMitra();
@@ -190,6 +193,15 @@
             }
         },
         methods: {
+            formatCurr: function(value) {
+                let val = (value/1).toFixed(0).replace('.', '')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+            },
+            numbfor: function(val) {
+                let value = val;
+                let replaced = value.replace(/\./g,'');
+                return parseInt(replaced);
+            },
             dangerClass() {
                 return{
                     'alert alert-danger':this.hasErrors,
@@ -214,7 +226,7 @@
                         return true;
                     }
                     else {
-                        let notYet = true
+                        let notYet = true;
                         this.rows.map(row => {
                             if(row.prefix === '' || row.prefix.length !== 3) {
                                 console.log('prefix is kosong');
@@ -250,8 +262,15 @@
                 this.hitungRupiah();
                 this.hitungTotal();
             },
-            onChangeAmount() {
-                this.hitungRupiah();
+            onChangeAmount(idx) {
+                if(this.rows[idx].amount === '') {
+                    this.rows[idx].amount = 0;
+                }
+                else {
+                    let rp = this.numbfor(this.rows[idx].amount);
+                    this.rows[idx].amount = this.formatCurr(rp);
+                }
+                this.hitungRupiah(idx);
                 this.hitungTotal();
             },
             putAllValas() {
@@ -315,28 +334,27 @@
                 this.prefixOnRequest = false;
             },
             setRate(idx,val) {
-                this.rows[idx].rate = val;
+                this.rows[idx].rate = this.formatCurr(val);
             },
             setKursId(idx,val) {
                 this.rows[idx].kurs_id = val;
             },
-            hitungRupiah() {
-                if(this.rows.length >= 1) {
-                    this.rows.map(row => {
-                        row.rupiah = row.rate * row.amount;
-                    });
-                }
+            hitungRupiah(idx) {
+                let row = this.rows[idx];
+                let rupiah = this.numbfor(row.rate) * this.numbfor(row.amount);
+                this.rows[idx].rupiah = this.formatCurr(rupiah);
             },
             hitungTotal() {
+                
                 if(this.rows.length > 1) {
                     let total = 0;
                     this.rows.map(row => {
-                         total += row.rupiah;
+                         total += this.numbfor(row.rupiah);
                     });
                     this.total = total;
                 }
                 else if (this.rows.length == 1) {
-                    this.total = this.rows[0].rupiah;
+                    this.total = this.numbfor(this.rows[0].rupiah);
                 }
                 else {
                     this.total = 0;
