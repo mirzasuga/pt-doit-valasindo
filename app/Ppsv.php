@@ -36,6 +36,10 @@ class Ppsv extends Model
         //return $this->hasManyThrough(Valas::class,Kurs::class,'kurs_id','valas_id','ppsv_id');
         return $this->belongsToMany(Kurs::class,'kurs_ppsv','ppsv_id','kurs_id');
     }
+
+    function bbsv() {
+        return $this->hasOne(Bbsv::class,'ppsv_id');
+    }
     
     function detilPermintaan() {
         return $this->kurs()->withPivot('amount','nominal_rupiah','rate');

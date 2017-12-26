@@ -121,7 +121,7 @@
               <p>Untuk mencetak bukti serah stok valas, silahkan klik tombol cetak</p>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-primary">Cetak</button>
+              <a href-"#" target="_blank" class="btn btn-primary">Cetak</a>
               <button type="button" class="btn btn-primary" @click="refresh">Tutup</button>
             </div>
         </div>
@@ -277,7 +277,7 @@ export default {
             
             that.$http.post(url,data).then(res => {
               that.storedComplete = true;
-              that.storedData = res.data;
+              that.storedData = res.data.bbsv;
             });
           }
         }

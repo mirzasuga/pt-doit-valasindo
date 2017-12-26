@@ -37,12 +37,23 @@ class BbsvController extends Controller
         $valas      = new Valas;
         
         event( new BbsvStored( $valas, $detilPpsv) );
-
+        
         return response()->json([
             'status'    => 200,
-            'bbsv'      => $bbsv
+            'bbsv'      => $bbsv,
+            'linkCetak' => route('bbsv_cetak',['bbsvId' => $bbsv->bbsv_id])
         ]);
 
+    }
+
+    function cetak($bbsvId) {
+        $bbsv = Bbsv::find($bbsvId);
+        $ppsv = $bbsv->ppsv->detilPermintaan()->get();
+        //dd($ppsv);
+        return view('bbsv.cetak',[
+            'bbsv'=> $bbsv,
+            'ppsv'=> $ppsv
+        ]);
     }
 
     private function collectDetilPpsv( $detilPpsv ) {

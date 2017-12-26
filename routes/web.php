@@ -34,7 +34,7 @@ Route::get('/url/valas', function() {
             
             'bbsv_upload_kuitansi'  => route("bbsv_upload_kuitansi"),
             'bbsv_store'            => route("bbsv_store"),
-
+            'bbsv_cetak'            => route("bbsv_cetak",['bbsvId' => null]),
 
             'put_user_all'     => route("put_user_all",['jenis' => null]),
 
@@ -293,6 +293,10 @@ Route::group(['prefix' => 'dashboard/bbsv'], function() {
     Route::post('/store', [
         'uses'      => 'bbsv\BbsvController@store',
         'as'        => 'bbsv_store'
+    ]);
+    Route::get('cetak/{bbsvId}',[
+        'uses'      => 'bbsv\BbsvController@cetak',
+        'as'        => 'bbsv_cetak'
     ]);
 });
 
