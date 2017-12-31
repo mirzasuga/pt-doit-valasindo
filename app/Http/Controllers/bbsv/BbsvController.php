@@ -22,10 +22,6 @@ class BbsvController extends Controller
         return view('bbsv.entry');
     }
     function store(Request $request) {
-        //event on store increment stok valas
-        // return response()->json([
-        //     'collect' => $this->collectDetilPpsv( $request->detil_ppsv ),
-        // ]);
         $bbsv                   = new Bbsv;
         $bbsv->keterangan       = $request->keterangan;
         $bbsv->url_kuitansi     = $request->url_kuitansi;

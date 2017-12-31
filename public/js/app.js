@@ -51060,7 +51060,14 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "modal-footer" }, [
-              _vm._v('"#" target="_blank" class="btn btn-primary">Cetak'),
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: { href: "#", target: "_blank" }
+                },
+                [_vm._v("Cetak")]
+              ),
               _vm._v(" "),
               _c(
                 "button",

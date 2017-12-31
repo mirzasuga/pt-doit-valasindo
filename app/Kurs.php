@@ -34,8 +34,4 @@ class Kurs extends Model
     public function activeKurs() {
 
     }
-
-    function getModalJualAttribute($value) {
-        return $this->pivot->rate.' edited';
-    }
 }

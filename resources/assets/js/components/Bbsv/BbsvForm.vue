@@ -121,7 +121,7 @@
               <p>Untuk mencetak bukti serah stok valas, silahkan klik tombol cetak</p>
             </div>
             <div class="modal-footer">
-              <a href-"#" target="_blank" class="btn btn-primary">Cetak</a>
+              <a href="#" target="_blank" class="btn btn-primary">Cetak</a>
               <button type="button" class="btn btn-primary" @click="refresh">Tutup</button>
             </div>
         </div>

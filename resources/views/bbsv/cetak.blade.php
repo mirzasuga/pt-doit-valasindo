@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                                 <p align="left" style="padding-left:30px;">
-                                    Pada tanggal {{ $bbsv->tgl_bbsv }} telah dilakukan pembelian stok valas berdasarkan nomor permintaan (noPpsv) yang telah disetujui dengan rincian sebagai berikut:
+                                    Pada tanggal {{ $bbsv->tgl_bbsv }} telah dilakukan pembelian stok valas berdasarkan nomor permintaan <b>#{{ $bbsv->ppsv->ppsv_id }}</b> yang telah disetujui dengan rincian sebagai berikut:
                                 </p>
                                 <label align="left" style="padding-left:30px;" for="">Rincian Pembelian</label>                                
                                 <div class="row">
