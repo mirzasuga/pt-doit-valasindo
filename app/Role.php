@@ -13,7 +13,7 @@ class Role extends Model
     ];
     public $timestamps=false;
     function users() {
-        return $this->belongsToMany(User::class, 'group_roles','user_id','role_id');
+        return $this->belongsToMany(User::class, 'group_roles','role_id','user_id');
     }
     function hasAccess(array $permissions) {
         foreach($permissions as $p) {

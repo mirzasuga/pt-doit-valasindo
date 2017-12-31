@@ -25,7 +25,30 @@ class Valas extends Model
     public function activeKurs() {
         return $this->kurses()->where('is_active',1)->first();
     }
+    public function bbsv() {
+        return $this->belongsToMany(Bbsv::class,'detil_bbsv','valas_id','bbsv_id');
+    }
     public function mitra() {
         //return $this->hasManyThrough(Mitra::class,'')
+    }
+
+    public static function batchIncrementStok( $valas ) {
+        foreach($valas as $item) {
+            $valas = self::find($item['valas_id']);
+            $valas->incrementStok($item['stok']);
+        }
+        return true;
+    }
+
+    public function incrementStok( $stok ) {
+        $this->stok += $stok;
+        if( $this->save() ) {
+            return true;
+        }
+        return false;
+    }
+    public function decrementStok( $stok ) {
+        $this->stok -= $stok;
+        return $this->save();
     }
 }

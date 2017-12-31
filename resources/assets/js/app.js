@@ -8,7 +8,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-
+//window.bus = bus;
 Vue.use(require('vue-resource'));
 Vue.use(require('vue-js-modal'));
 
@@ -24,11 +24,43 @@ import Mitra from './components/Mitra.vue';
 import Penukaran from './components/Penukaran.vue';
 import Ppsv from './components/Ppsv.vue';
 import Approvalitem from './components/Approvalitem.vue';
+import Btupsvform from './components/Btupsvform.vue';
+import ModalCariPpsv from './components/ModalCariPpsv.vue';
 
 import Approval from './components/Approval/Approval.vue';
-Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrftoken;
-window.routerIsReady = false;
+import Bbsv from './components/Bbsv/Bbsv.vue';
+import Uploadkuitansi from './components/Bbsv/Uploadkuitansi.vue';
+import BbsvForm from './components/Bbsv/BbsvForm.vue';
 
+function TextBoxRupiah(param) {
+    this.element  = $(param.id);
+    this.pemisah = param.pemisah;
+    this.init = function() {
+        var pemisah = this.pemisah;
+        this.element.keyup(function(event) {
+            // skip for arrow keys
+            if(event.which >= 37 && event.which <= 40) return;
+            // format number
+            $(this).val(function(index, value) {
+                return value
+                .replace(/\D/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, pemisah);
+            });
+        });
+    };
+}
+
+
+Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrftoken;
+Vue.mixin({
+    methods: {
+        formatCurr: function(value) {
+            let val = (value/1).toFixed(2).replace('.', ',')
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        },
+    }
+});
+window.routerIsReady = false;
 const app = new Vue({
     el: '#app',
     components:{
@@ -37,7 +69,11 @@ const app = new Vue({
         Penukaran,
         Ppsv,
         Approvalitem,
-        Approval
+        Approval,
+        Btupsvform,
+        Bbsv,
+        // Uploadkuitansi,
+        //BbsvForm,
     },
     created() {
         this.$http.get(configURLs).then(res => {
@@ -51,3 +87,4 @@ const app = new Vue({
     methods: {
     }
 });
+

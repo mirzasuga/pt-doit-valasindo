@@ -24,6 +24,9 @@ class PpsvController extends Controller
     function approvals() {
         return view('ppsv.approval');
     }
+    function statusPermintaan() {
+        return view('ppsv.status');
+    }
 
 
 
@@ -38,7 +41,7 @@ class PpsvController extends Controller
 
         $ppsv = new Ppsv;
         $ppsv->keterangan           = $request->keterangan;
-        $ppsv->total_rupiah         = $request->total_rupiah;
+        $ppsv->total_rupiah         = str_replace('.','',$request->total_rupiah);
         $ppsv->tgl_permintaan       = date('Y-m-d H:i:s');
         $ppsv->processed_at         = null;
         $ppsv->viewed_at            = null;
@@ -47,9 +50,9 @@ class PpsvController extends Controller
         if( $ppsv->save() ) {
             foreach($request->kurs_ppsv as $kurs) {
                 $ppsv->detilPpsv()->attach( $kurs['kurs_id'], [
-                    'amount'            => $kurs['amount'],
-                    'rate'              => $kurs['rate'],
-                    'nominal_rupiah'    => $kurs['rupiah'],
+                    'amount'            => str_replace('.','',$kurs['amount']),
+                    'rate'              => str_replace('.','',$kurs['rate']),
+                    'nominal_rupiah'    => str_replace('.','',$kurs['rupiah']),
                 ]);
             }
             return response()->json([
@@ -138,6 +141,9 @@ class PpsvController extends Controller
         ]);
     }
     function filter($status,$tanggal) {
+        if( Auth::user()->roles()->first()->jenis === 'TELLER' ) {
+            $status = 'A';
+        }
         $ppsv = Ppsv::status($status)->tanggal($tanggal)
         ->with('detilPpsv','mitra','stafPembelian')
         ->get();
@@ -149,6 +155,25 @@ class PpsvController extends Controller
     }
     function detil($ppsv_id) {
 
+    }
+    function approved($ppsv_id,$detil = null) {
+        if($detil == 'detil') {
+            $ppsv = Ppsv::approved($ppsv_id)->with('detilPpsv')->get();
+        }
+        else {
+            $ppsv = Ppsv::approved($ppsv_id)->get();
+        }
+        return response()->json([
+            'status'    => 200,
+            'ppsv'      => $ppsv,
+        ]);
+    }
+    function search($q) {
+        $ppsv = Ppsv::search($q)->get();
+        return response()->json([
+            'status'    => 200,
+            'ppsv'      => $ppsv
+        ]);
     }
     
     

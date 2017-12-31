@@ -11,6 +11,7 @@ class Ppsv extends Model
     protected $fillable = [
         'tgl_permintaan',
         'keterangan',
+        'total_rupiah',
         'status',
         'processed_at',
         'viewed_at'
@@ -32,9 +33,14 @@ class Ppsv extends Model
     function detilPpsv() {
         return $this->belongsToMany(Kurs::class,'kurs_ppsv','ppsv_id','kurs_id')->withPivot('amount','nominal_rupiah','rate')->with('valas');
     }
-    // function valas() {
-    //     return $this->hasManyThrough(Kurs::class,)
-    // }
+    function kurs() {
+        //return $this->hasManyThrough(Valas::class,Kurs::class,'kurs_id','valas_id','ppsv_id');
+        return $this->belongsToMany(Kurs::class,'kurs_ppsv','ppsv_id','kurs_id');
+    }
+
+    function bbsv() {
+        return $this->hasOne(Bbsv::class,'ppsv_id');
+    }
     
     function detilPermintaan() {
         return $this->kurs()->withPivot('amount','nominal_rupiah','rate');
@@ -42,7 +48,15 @@ class Ppsv extends Model
     function stafPembelian() {
         return $this->belongsTo(User::class,'who_request','user_id');
     }
-    
+    function search($q) {
+        return $this->where('ppsv_id','like','%'.$q.'%');
+    }
+
+    function done() {
+        $this->status = 'D';
+        return $this->save();
+    }
+
 
 /**
  * ==========
@@ -62,6 +76,13 @@ function getStatusAttribute($status) {
             break;
     }
 }
+// function getRelationsDetilPpsvPivotRateAttribute($value) {
+//     return ' edited';
+// }
+function getTotalRupiahAttribute($value) {
+    return number_format($value,0,'','.');
+}
+
 /**
  * =========
  *  SCOPE
@@ -72,6 +93,9 @@ function getStatusAttribute($status) {
             return $query;
         }
         return $query->where('status',$param);
+    }
+    function scopeApproved($query,$param) {
+        return $query->where('status','A')->where('ppsv_id',$param);
     }
     function scopeTanggal($query,$param) {
         if($param === '0000-00-00') {
